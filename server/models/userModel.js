@@ -58,22 +58,24 @@ async function classify(data) {
   return classification
 }
 
-/*----- ACTIVITIES -----*/
+/*----- CHECKLIST -----*/
 
-module.exports.getUserActivities = async (uid) => {
+module.exports.getUserChecklist = async function(id) {
   try {
-    let result = 'user activities list'
-    return { status: 200, result };
-  } catch (error) {
-    return { status: 500, result: error };
+      let sql = "select list_id, list_name, list_main, SUM(item_check) as checks "+
+      "from checklist "+
+      "inner join users "+
+      "on user_id_FK = user_id "+
+      "inner join check_item "+
+      "on list_id_FK = list_id "+
+      "where user_id = $1 "+
+      "group by list_id";
+      let result = await pool.query(sql,[id]);
+      if (result.rows.length > 0) 
+          return { status:200, result:result.rows };
+      else return {status: 404, result: {msg: "No checklists associated"}};
+  } catch(err) {
+      console.log(err);
+      return {status:500, result: err};
   }
-};
-
-module.exports.addUserActivity = async (uid) => {
-  try {
-    let result = 'add to user activities list'
-    return { status: 200, result };
-  } catch (error) {
-    return { status: 500, result: error };
-  }
-};
+}

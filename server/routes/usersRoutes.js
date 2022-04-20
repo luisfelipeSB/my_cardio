@@ -39,20 +39,13 @@ router.get("/:id/cardiacdata/risks", async (req, res) => {
   res.status(status).send(result);
 });
 
-/*----- ACTIVITIES -----*/
+/*----- CHECKLISTS -----*/
 
-router.get("/:id/activities", async (req, res) => {
-  const id = req.params.id;
-  const { status, result } = await userModel.getUserActivities(id);
-
-  res.status(status).send(result);
-});
-
-router.post("/:id/activities", async (req, res) => {
-  const data = req.body;
-  const { status, result } = await userModel.getUserActivity(data);
-
-  res.status(status).send(result);
+router.get('/:id/checklists', async function(req, res, next) {
+  let id = req.params.id;
+  console.log("Sending checklists of user with id "+id);
+  let result = await uModel.getUserChecklist(id);
+  res.status(result.status).send(result.result);
 });
 
 module.exports = router;
