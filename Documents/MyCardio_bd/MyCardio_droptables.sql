@@ -1,1 +1,1 @@
-drop table users, cardio_history, checklist, check_item;
+drop table users, cardio_history, checklist;
