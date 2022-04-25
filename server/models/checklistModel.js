@@ -1,26 +1,9 @@
 var pool = require("./connection");
 
-module.exports.getItemFromChecklist = async function(id) {
+module.exports.insertChecklistItem = async function(checklist) {
     try {
-        let sql = "select item_id, item_name, item_check "+
-        "from check_item "+
-        "inner join checklist "+
-        "on list_id_FK = list_id "+
-        "where list_id = $1";
-        let result = await pool.query(sql,[id]);
-        if (result.rows.length > 0) 
-            return { status:200, result:result.rows };
-        else return {status: 404, result: {msg: "No items associated"}};
-    } catch(err) {
-        console.log(err);
-        return {status:500, result: err};
-    }
-}
-
-module.exports.insertChecklist = async function(checklist) {
-    try {
-        let sql ="insert into checklist (list_name, list_main, user_id_FK) values ($1, false, $2);";
-        let result = await pool.query(sql,[checklist.list_name,checklist.user_id_FK]);
+        let sql ="insert into checklist (item_name, item_check, user_id_FK) values ($1, false, $2);";
+        let result = await pool.query(sql,[checklist.item_name,checklist.user_id_FK]);
         return { status:200, result:result.rows[0]};
     } catch (err) {
         console.log(err);
@@ -28,23 +11,11 @@ module.exports.insertChecklist = async function(checklist) {
     }
 }
 
-module.exports.removeChecklist = async function(id) {
-    try {
-        let sql ="delete from checklist "+
-        "where list_id = $1;";
-        let result = await pool.query(sql,[id]);
-        return { status:200, result:result.rows[0]};
-    } catch (err) {
-        console.log(err);
-        return { status:500, result: err};
-    }
-}
-
-module.exports.updateChecklistName = async function(id,data) {
+module.exports.updateChecklistItemName = async function(id,data) {
     try {
         let sql ="update checklist "+
-        "set list_name = $1 where list_id = $2";
-        let result = await pool.query(sql,[data.list_name,id]);
+        "set item_name = $1 where item_id = $2";
+        let result = await pool.query(sql,[data.item_name,id]);
         return { status:200, result:result.rows[0]};
     } catch (err) {
         console.log(err);
@@ -52,19 +23,34 @@ module.exports.updateChecklistName = async function(id,data) {
     }
 }
 
-module.exports.updateChecklistMain = async function(id) {
+module.exports.removeChecklistItem = async function(id) {
     try {
-        let sql ="select list_id from checklist where list_main = true";
-        let result = await pool.query(sql);
-        console.log(result.rows[0].list_id);
+        let sql ="delete from checklist "+
+        "where item_id = $1;";
+        let result = await pool.query(sql,[id]);
+        return { status:200, result:result.rows[0]};
+    } catch (err) {
+        console.log(err);
+        return { status:500, result: err};
+    }
+}
 
-        let sql2 ="update checklist "+
-        "set list_main = false where list_id = $1";
-        let result2 = await pool.query(sql2,[result.rows[0].list_id]);
+module.exports.updateChecklistItemCheck = async function(id) {
+    try {
+        let sql ="select item_check from checklist where item_id = $1";
+        let result = await pool.query(sql,[id]);
+        //console.log(result.rows[0].item_check);
 
-        let sql3 ="update checklist "+
-        "set list_main = true where list_id = $1";
-        let result3 = await pool.query(sql3,[id]);
+        let sql2;
+        if(result.rows[0].item_check == false) {
+            sql2 ="update checklist "+
+            "set item_check = true where item_id = $1";
+            let result2 = await pool.query(sql2,[id]);
+        } else {
+            sql2 ="update checklist "+
+            "set item_check = false where item_id = $1";
+            let result3 = await pool.query(sql2,[id]);
+        }
 
         return { status:200, result:result.rows[0]};
     } catch (err) {
