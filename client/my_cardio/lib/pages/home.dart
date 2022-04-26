@@ -38,13 +38,7 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         width: 60,
                         height: 60,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                  'https://googleflutter.com/sample_image.jpg'),
-                              fit: BoxFit.fill),
-                        ),
+                        child: Icon(Icons.account_circle, size: 50), // TODO
                       ),
                       SizedBox(
                         width: 110,
@@ -65,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                         children: const [
                           // TODO adaptive username and password + style
                           Text('Good Morning'),
-                          Text('user_name'),
+                          Text('[user_name]'),
                           Text('Hope you have a nice day!'),
                         ],
                       ),
@@ -82,17 +76,18 @@ class _HomePageState extends State<HomePage> {
                       Column(
                         children: [
                           Badge(
-                            badgeContent: Text('1'),
-                            child: const Icon(Icons.notifications, size: 50),
+                            badgeContent: Text('1'), // TODO
+                            child: const Icon(Icons.notifications, size: 55),
                           )
                         ],
                       ),
                       Column(
                         children: [
                           Row(
+                            // TODO
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(left: 20),
+                                padding: const EdgeInsets.only(left: 16),
                                 child: Icon(
                                   Icons.circle,
                                   color: colorscheme.primary,
@@ -100,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 20),
+                                padding: const EdgeInsets.only(left: 16),
                                 child: Icon(
                                   Icons.circle,
                                   color: colorscheme.secondary,
@@ -108,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 20),
+                                padding: const EdgeInsets.only(left: 16),
                                 child: Icon(
                                   Icons.circle,
                                   color: colorscheme.tertiary,

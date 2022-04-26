@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_cardio/pages/cardiac_data.dart';
 import 'package:my_cardio/pages/login.dart';
 import 'package:my_cardio/pages/home.dart';
 import 'package:my_cardio/pages/cardiac_data.dart';

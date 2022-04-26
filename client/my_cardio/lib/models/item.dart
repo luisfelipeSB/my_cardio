@@ -1,9 +1,9 @@
 class Item {
   final int itemId;
-  final String itemName;
+  String itemName;
   bool itemCheck;
 
-Item({
+  Item({
     required this.itemId,
     required this.itemName,
     required this.itemCheck,
@@ -17,5 +17,3 @@ Item({
     );
   }
 }
-
-
