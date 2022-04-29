@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:badges/src/badge.dart';
-import 'package:my_cardio/pages/cardiac_data.dart';
-import 'package:my_cardio/pages/patterns.dart';
-import 'package:my_cardio/pages/rankings.dart';
+import 'package:my_cardio/screens/activities/activities.dart';
+import 'package:my_cardio/screens/cardiac_data.dart';
+import 'package:my_cardio/screens/risks.dart';
+import 'package:my_cardio/screens/profile.dart';
+
+import '../models/user.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,6 +19,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final User user = ModalRoute.of(context)!.settings.arguments as User;
+    print(user.code);
+
     final colorscheme = Theme.of(context).colorScheme;
     return Scaffold(
       key: scaffoldKey,
@@ -35,14 +41,25 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        child: Icon(Icons.account_circle, size: 50), // TODO
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  Scaffold(body: ProfilePage()),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          child: Icon(Icons.account_circle, size: 60), // TODO
+                        ),
                       ),
                       SizedBox(
-                        width: 110,
-                        height: 50,
+                        width: 150,
+                        height: 60,
                         child: Image.asset('assets/images/logo-horiz.png'),
                       ),
                     ],
@@ -90,14 +107,6 @@ class _HomePageState extends State<HomePage> {
                                 padding: const EdgeInsets.only(left: 16),
                                 child: Icon(
                                   Icons.circle,
-                                  color: colorscheme.primary,
-                                  size: 50,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16),
-                                child: Icon(
-                                  Icons.circle,
                                   color: colorscheme.secondary,
                                   size: 50,
                                 ),
@@ -107,6 +116,14 @@ class _HomePageState extends State<HomePage> {
                                 child: Icon(
                                   Icons.circle,
                                   color: colorscheme.tertiary,
+                                  size: 50,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 16),
+                                child: Icon(
+                                  Icons.circle,
+                                  color: colorscheme.primary,
                                   size: 50,
                                 ),
                               ),
@@ -129,13 +146,14 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             // Main panel
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 16.0),
+                              padding: const EdgeInsets.only(bottom: 20.0),
                               child: InkWell(
-                                onTap: () async {
-                                  await Navigator.push(
+                                onTap: () {
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => CardiacDataPage(),
+                                      builder: (context) =>
+                                          Scaffold(body: CardiacDataPage()),
                                     ),
                                   );
                                 },
@@ -159,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 15.0),
                                         child: Icon(
-                                          Icons.auto_graph,
+                                          Icons.monitor_heart_rounded,
                                           size: 50,
                                         ),
                                       ),
@@ -185,11 +203,12 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 // Panel 1
                                 InkWell(
-                                  onTap: () async {
-                                    await Navigator.push(
+                                  onTap: () {
+                                    Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => PatternsPage(),
+                                        builder: (context) =>
+                                            Scaffold(body: RisksPage()),
                                       ),
                                     );
                                   },
@@ -209,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                                           children: [
                                             const Padding(
                                               padding: EdgeInsets.symmetric(
-                                                  horizontal: 15.0),
+                                                  horizontal: 10.0),
                                               child: Icon(
                                                 Icons.error,
                                                 size: 40,
@@ -234,11 +253,12 @@ class _HomePageState extends State<HomePage> {
 
                                 // Panel 2
                                 InkWell(
-                                  onTap: () async {
-                                    await Navigator.push(
+                                  onTap: () {
+                                    Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => RankingsPage(),
+                                        builder: (context) =>
+                                            Scaffold(body: ActivitiesPage()),
                                       ),
                                     );
                                   },
@@ -258,9 +278,9 @@ class _HomePageState extends State<HomePage> {
                                           children: [
                                             const Padding(
                                               padding: EdgeInsets.symmetric(
-                                                  horizontal: 15.0),
+                                                  horizontal: 10.0),
                                               child: Icon(
-                                                Icons.groups,
+                                                Icons.edit_note_rounded,
                                                 size: 40,
                                               ),
                                             ),
@@ -270,8 +290,8 @@ class _HomePageState extends State<HomePage> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: const [
-                                                Text('Rankings'),
-                                                Text('Who\'s best?'),
+                                                Text('Activities'),
+                                                Text('Take notes'),
                                               ],
                                             ),
                                           ],
@@ -282,6 +302,31 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ],
                             ),
+
+                            /* Upload new data
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 50.0),
+                                  child: Ink(
+                                    width: 110,
+                                    height: 110,
+                                    decoration: const ShapeDecoration(
+                                      color: Color.fromARGB(255, 95, 204, 255),
+                                      shape: CircleBorder(),
+                                    ),
+                                    child: IconButton(
+                                      icon: const Icon(Icons.upload),
+                                      iconSize: 40,
+                                      color: Colors.white,
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            */
                           ],
                         ),
                       ),

@@ -30,7 +30,7 @@ const lightColorScheme = ColorScheme(
   onInverseSurface: Color(0xFFEFF1F2),
   inverseSurface: Color(0xFF2E3132),
   inversePrimary: Color(0xFFDBB9FF),
-  shadow: Color(0xFF000000),
+  shadow: Colors.black,
 );
 
 const darkColorScheme = ColorScheme(
@@ -39,11 +39,11 @@ const darkColorScheme = ColorScheme(
   onPrimary: Color(0xFF421475),
   primaryContainer: Color(0xFF5A308D),
   onPrimaryContainer: Color(0xFFEFDBFF),
-  secondary: Color(0xFF4EDAD4),
+  secondary: Color.fromARGB(255, 60, 182, 176),
   onSecondary: Color(0xFF003735),
   secondaryContainer: Color(0xFF00504D),
   onSecondaryContainer: Color(0xFF70F7F1),
-  tertiary: Color(0xFF4DDADA),
+  tertiary: Color.fromARGB(255, 76, 235, 235),
   onTertiary: Color(0xFF003738),
   tertiaryContainer: Color(0xFF004F50),
   onTertiaryContainer: Color(0xFF6EF6F6),
@@ -61,5 +61,5 @@ const darkColorScheme = ColorScheme(
   onInverseSurface: Color(0xFF191C1D),
   inverseSurface: Color(0xFFE1E3E4),
   inversePrimary: Color(0xFF7349A7),
-  shadow: Color(0xFF000000),
+  shadow: Colors.white,
 );

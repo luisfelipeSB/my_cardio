@@ -1,20 +1,29 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import '../models/item.dart';
 
-class ItemRepository {
+// TODO replace '1' with actual userId
+// TODO replace BASE_URI after deploy
+// TODO edit item model
+
+class checklistApiMethods {
   static const String BASE_URI = 'http://10.0.2.2:3000';
+
+  /* Test
   List<Item> items = [
     Item(itemId: 1, itemName: 'Jog after work', itemCheck: false),
-    Item(itemId: 2, itemName: 'Call parents', itemCheck: true),
+    Item(itemId: 2, itemName: 'Call family', itemCheck: true),
     Item(itemId: 3, itemName: 'Organize workspace', itemCheck: false),
   ];
+  */
 
   Future getData() async {
-    return items;
     /*
+    print('get ${items.length}');
+    return items;
+    */
+    ///*
     try {
       final response =
           await http.get(Uri.parse('$BASE_URI/api/users/1/checklist/items'));
@@ -29,13 +38,17 @@ class ItemRepository {
     } catch (e) {
       return e.toString();
     }
-    */
+    //*/
   }
 
   Future createData(String itemName) async {
-    items.add(Item(itemId: items.length, itemName: itemName, itemCheck: false));
-    return true;
     /*
+    items.add(
+        Item(itemId: items.length + 1, itemName: itemName, itemCheck: false));
+    print('create ${items.length}');
+    return true;
+    */
+    ///*
     final response = await http.post(
       Uri.parse('$BASE_URI/api/checklist/additem'),
       headers: {
@@ -53,13 +66,17 @@ class ItemRepository {
     } catch (e) {
       return e.toString();
     }
-    */
+    //*/
   }
 
   Future updateData(String id, String itemName) async {
-    items[int.parse(id)].itemName = itemName;
-    return true;
     /*
+    items.where((i) => i.itemId == int.parse(id)).toList()[0].itemName =
+        itemName;
+    print('update $id - #items: ${items.length}');
+    return true;
+    */
+    ///*
     final response = await http.put(
       Uri.parse('$BASE_URI/api/checklist/item/$id/updatename'),
       headers: {
@@ -77,13 +94,18 @@ class ItemRepository {
     } catch (e) {
       return e.toString();
     }
-    */
+    //*/
   }
 
   Future deleteData(String id) async {
-    items.removeAt(int.parse(id));
-    return true;
     /*
+    for (int i = 0; i < items.length; i++) {
+      if (items[i].itemId == int.parse(id)) items.removeAt(i);
+    }
+    print('delete ${items.length}');
+    return true;
+    */
+    ///*
     final response =
         await http.delete(Uri.parse('$BASE_URI/api/checklist/item/$id/delete'));
 
@@ -96,13 +118,17 @@ class ItemRepository {
     } catch (e) {
       return e.toString();
     }
-    */
+    //*/
   }
 
   Future updateCheck(String id) async {
-    items[int.parse(id)].itemCheck = !items[int.parse(id)].itemCheck;
-    return true;
     /*
+    var b = items.where((i) => i.itemId == int.parse(id)).toList()[0].itemCheck;
+    items.where((i) => i.itemId == int.parse(id)).toList()[0].itemCheck = !b;
+    print('bool ${!b}');
+    return true;
+    */
+    ///*
     final response = await http
         .put(Uri.parse('$BASE_URI/api/checklist/item/$id/updatecheck'));
 
@@ -115,6 +141,6 @@ class ItemRepository {
     } catch (e) {
       return e.toString();
     }
-    */
+    //*/
   }
 }

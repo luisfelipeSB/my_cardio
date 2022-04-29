@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_cardio/pages/login.dart';
-import 'package:my_cardio/pages/home.dart';
-import 'package:my_cardio/pages/cardiac_data.dart';
-import 'package:my_cardio/pages/activities.dart';
-import 'package:my_cardio/pages/profile.dart';
-import 'package:my_cardio/helpers/colorScheme.dart';
+import 'package:my_cardio/screens/login.dart';
+import 'package:my_cardio/screens/home.dart';
+import 'package:my_cardio/screens/cardiac_data.dart';
+import 'package:my_cardio/screens/activities/activities.dart';
+import 'package:my_cardio/screens/profile.dart';
+import 'package:my_cardio/common/colorScheme.dart';
 
 void main() {
   runApp(const MyCardioApp());
@@ -66,71 +66,8 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = {
-      'homePage': HomePage(),
-      'cardiacData': CardiacDataPage(),
-      'myActivities': ActivitiesPage(),
-      'profilePage': ProfilePage(),
-    };
-    final currentIndex = tabs.keys.toList().indexOf(_currentPage);
     final colorscheme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      body: tabs[_currentPage],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (i) => setState(() => _currentPage = tabs.keys.toList()[i]),
-        backgroundColor: colorscheme.surfaceVariant,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_outlined,
-              size: 24,
-            ),
-            activeIcon: Icon(
-              Icons.home_rounded,
-              size: 24,
-            ),
-            label: ' Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.monitor_heart_outlined,
-              size: 24,
-            ),
-            activeIcon: Icon(
-              Icons.monitor_heart,
-              size: 24,
-            ),
-            label: ' Cardiac Data',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.edit_note_outlined,
-              size: 24,
-            ),
-            activeIcon: Icon(
-              Icons.edit_note_rounded,
-              size: 24,
-            ),
-            label: ' Activities',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_outline,
-              size: 24,
-            ),
-            activeIcon: Icon(
-              Icons.person,
-              size: 24,
-            ),
-            label: ' Profile',
-          ),
-        ],
-      ),
-    );
+    return const Scaffold(body: HomePage());
   }
 }

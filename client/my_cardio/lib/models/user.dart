@@ -1,16 +1,19 @@
 class User {
-  final int id;
-  final String name;
+  final int code;
+  final String sex;
+  final DateTime birthDate;
 
-  const User({
-    required this.id,
-    required this.name,
+  User({
+    required this.code,
+    required this.sex,
+    required this.birthDate,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'] as int,
-      name: json['name'] as String,
+      code: json['codigo'],
+      sex: json['sexo'],
+      birthDate: json['data_nascimento'],
     );
   }
 }

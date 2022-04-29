@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_cardio/screens/login.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -32,6 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Icon(Icons.account_circle, size: 50), // TODO
                     Row(
                       children: [
+                        // Light/dark mode
                         ToggleSwitch(
                           minWidth: 50.0,
                           minHeight: 50.0,
@@ -49,19 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             print('theme toggled'); // TODO toggle theme
                           },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.grey,
-                              shape: BoxShape.circle,
-                            ),
-                            child: IconButton(
-                              icon: const Icon(Icons.edit_outlined),
-                              onPressed: () {},
-                            ),
-                          ),
-                        ),
+
+                        // Log out
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),
                           child: Container(
@@ -71,7 +62,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             child: IconButton(
                               icon: const Icon(Icons.login_rounded),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const Scaffold(body: LoginPage()),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),
