@@ -6,12 +6,15 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@tensorflow/tfjs": "^3.16.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
     "express": "~4.16.1",
     "morgan": "~1.9.1",
-    "pg": "^8.7.1"
+    "node-pre-gyp": "^0.17.0",
+    "pg": "^8.7.1",
+    "tfjs-node-save": "0.0.2"
   }
 }

@@ -1,9 +1,10 @@
 var pool = require("./connection");
+const tf = require("@tensorflow/tfjs");
 
 module.exports.insertChecklistItem = async function(checklist) {
     try {
-        let sql ="insert into checklist (item_name, item_check, user_id_FK) values ($1, false, $2);";
-        let result = await pool.query(sql,[checklist.item_name,checklist.user_id_FK]);
+        let sql ="insert into checklist (item_name, item_check, item_category, user_id_FK) values ($1, false, $2, $3);";
+        let result = await pool.query(sql,[checklist.item_name,checklist.item_category,checklist.user_id_FK]);
         return { status:200, result:result.rows[0]};
     } catch (err) {
         console.log(err);
@@ -14,8 +15,8 @@ module.exports.insertChecklistItem = async function(checklist) {
 module.exports.updateChecklistItemName = async function(id,data) {
     try {
         let sql ="update checklist "+
-        "set item_name = $1 where item_id = $2";
-        let result = await pool.query(sql,[data.item_name,id]);
+        "set item_name = $1, item_category = $2 where item_id = $3";
+        let result = await pool.query(sql,[data.item_name,data.item_category,id]);
         return { status:200, result:result.rows[0]};
     } catch (err) {
         console.log(err);
@@ -56,5 +57,25 @@ module.exports.updateChecklistItemCheck = async function(id) {
     } catch (err) {
         console.log(err);
         return { status:500, result: err};
+    }
+}
+
+module.exports.insertModel = async function(data) {
+    try {
+        let model = undefined;
+        model = await tf.loadLayersModel("https://raw.githubusercontent.com/hugomeduarte/testes/main/model.json");
+        console.log("model loaded")
+
+        input_xs = tf.tensor2d([
+          [data.age, data.trestbps, data.chol, data.thalach, data.thal, data.sex, data.cp, data.fbs, data.restecg, data.exang, data.oldpeak, data.slope, data.ca]
+        ]);
+
+        let output = model.predict(input_xs);
+        const outputData = output.dataSync();
+        console.log(outputData);
+        
+        return { status:200, result:outputData};
+    } catch (err) {
+        console.log(err);
     }
 }

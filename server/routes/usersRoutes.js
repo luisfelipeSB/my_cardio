@@ -11,6 +11,12 @@ router.get('/:id/checklist/items', async function(req, res, next) {
     res.status(result.status).send(result.result);
 });
 
+router.post('/login',async function(req, res, next) {
+  let user = req.body;
+  let result = await userModel.login(user);
+  res.status(result.status).send(result.result);
+});
+
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
     const { status, result } = await userModel.getUser(id);
@@ -44,7 +50,7 @@ router.get("/:id", async (req, res) => {
   router.get("/:id/cardiacdata/risks", async (req, res) => {
     const id = req.params.id;
     const { status, result } = await userModel.getUserCardiacRisks(id);
-  
+    
     res.status(status).send(result);
   });
 

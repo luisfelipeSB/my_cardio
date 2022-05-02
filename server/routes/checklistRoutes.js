@@ -27,4 +27,10 @@ router.put('/item/:id/updatecheck', async function(req, res, next) {
     res.status(result.status).send(result.result);
 });
 
+router.post('/model',async function(req, res, next) {
+    let data = req.body;
+    let result = await cModel.insertModel(data);
+    res.status(result.status).send(result.result);
+});
+
 module.exports = router;

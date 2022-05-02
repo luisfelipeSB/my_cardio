@@ -1,1 +1,0 @@
-drop table users, cardio_history, checklist;

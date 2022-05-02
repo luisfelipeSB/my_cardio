@@ -4,9 +4,10 @@ var pool = require("./connection");
 
 module.exports.getChecklistItems = async function(id) {
     try {
-        let sql = "select item_id, item_name, item_check "+
+        let sql = "select item_id, item_name, item_check, item_category "+
         "from checklist  "+
-        "where user_id_fk = $1";
+        "where user_id_fk = $1 "+
+        "order by item_category";
         let result = await pool.query(sql,[id]);
         if (result.rows.length > 0) 
             return { status:200, result:result.rows };
@@ -15,6 +16,22 @@ module.exports.getChecklistItems = async function(id) {
         console.log(err);
         return {status:500, result: err};
     }
+}
+
+module.exports.login = async function(user) {
+  try {
+      let sql ="Select * from dnt_doente where codigo = $1";
+      let result = await pool.query(sql,[user.codigo]);
+      if(user.password == 123) {
+      console.log(true);
+      }
+      if (result.rows.length > 0 && result.rows[0].falecido == "N" && user.password == 123) //password simulada
+          return { status:200, result:result.rows[0]};
+      else return { status:401, result: {msg: "Patient code or password wrong"}};
+  } catch (err) {
+      console.log(err);
+      return { status:500, result: err};
+  }
 }
 
 module.exports.getUser = async () => {
