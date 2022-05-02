@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_cardio/common/apiChecklist.dart';
 
-<<<<<<< HEAD
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
-=======
->>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 class UpdateItem extends StatefulWidget {
   const UpdateItem({Key? key}) : super(key: key);
 
@@ -18,7 +15,6 @@ class _UpdateItemState extends State<UpdateItem> {
   final itemNameController = TextEditingController();
   checklistApiMethods checklistAPI = checklistApiMethods();
 
-<<<<<<< HEAD
   late String selectedTag;
 
   @override
@@ -30,12 +26,6 @@ class _UpdateItemState extends State<UpdateItem> {
 
     selectedTag = args[2];
     
-=======
-  @override
-  Widget build(BuildContext context) {
-    final String itemId = ModalRoute.of(context)!.settings.arguments.toString();
-    print(itemId);
->>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 
     return Scaffold(
       appBar: AppBar(
@@ -50,7 +40,6 @@ class _UpdateItemState extends State<UpdateItem> {
               controller: itemNameController,
               decoration: const InputDecoration(hintText: 'New item name'),
             ),
-<<<<<<< HEAD
             DropdownButtonFormField(
               items: <String>[
                 'Exercise',
@@ -73,12 +62,6 @@ class _UpdateItemState extends State<UpdateItem> {
               onPressed: () async {
                 bool response = await checklistAPI.updateData(
                     args[0], itemNameController.text, selectedTag);
-=======
-            ElevatedButton(
-              onPressed: () async {
-                bool response = await checklistAPI.updateData(
-                    itemId, itemNameController.text);
->>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 
                 if (response) {
                   Navigator.pop(context);

@@ -34,10 +34,7 @@ dependencies:
   http: ^0.13.4
   toggle_switch: ^2.0.1
   badges: ^2.0.2
-<<<<<<< HEAD:client/my_cardio/pubspec.yaml
   shared_preferences: ^2.0.13
-=======
->>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d:client/pubspec.yaml
 
 
 dev_dependencies:

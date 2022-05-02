@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../common/apiCardiacData.dart';
 
-<<<<<<< HEAD
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
-=======
->>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 class RisksPage extends StatefulWidget {
   const RisksPage({Key? key}) : super(key: key);
 
