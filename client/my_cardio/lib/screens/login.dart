@@ -3,12 +3,17 @@ import 'package:my_cardio/main.dart';
 import 'package:my_cardio/screens/home.dart';
 
 import '../common/apiUser.dart';
+<<<<<<< HEAD
 import '../common/sharedPreferences.dart';
 import '../models/user.dart';
 
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
+=======
+import '../models/user.dart';
+
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -24,14 +29,24 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   UserApiMethods userAPI = UserApiMethods();
 
+<<<<<<< HEAD
   /*Future<User> _login(user) async => await userAPI.login(user);*/
 
   /*bool _validateCredentialsFormat(code, password) {
+=======
+  Future<User> _login(user) async => await userAPI.login(user);
+
+  bool _validateCredentialsFormat(code, password) {
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
     // TODO password length?
     if (password.length != 4) return false;
     if (code == null) return false;
     return double.tryParse(code) != null;
+<<<<<<< HEAD
   }*/
+=======
+  }
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                             final String code = patientCodeController.text;
                             final String password = patientLoginController.text;
 
+<<<<<<< HEAD
                             bool response = await userAPI.login(code,password);
 
                             if(response) {
@@ -134,6 +150,10 @@ class _LoginPageState extends State<LoginPage> {
                               );
                             }
                             /*
+=======
+                            final usr = {'code': code, 'password': password};
+
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
                             // Validating format
                             if (_validateCredentialsFormat(code, password)) {
                               User user = await _login(usr);
@@ -150,7 +170,11 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 );
                               }
+<<<<<<< HEAD
                             
+=======
+
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
                               // TODO Showing error message
                             } else {
                               showDialog(
@@ -168,7 +192,11 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 barrierDismissible: true,
                               );
+<<<<<<< HEAD
                             }*/
+=======
+                            }
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
                           },
                           child: const Text(
                             'Login',

@@ -42,7 +42,10 @@ class _MyCardioAppState extends State<MyCardioApp> {
       ),
       themeMode: _themeMode,
       home: const LoginPage(),
+<<<<<<< HEAD
       debugShowCheckedModeBanner: false,
+=======
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
     );
   }
 }

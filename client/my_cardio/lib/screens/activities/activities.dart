@@ -7,11 +7,14 @@ import 'package:my_cardio/screens/activities/create_item.dart';
 import 'package:my_cardio/screens/activities/update_item.dart';
 import 'package:my_cardio/models/item.dart';
 
+<<<<<<< HEAD
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/sharedPreferences.dart';
 
+=======
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 class ActivitiesPage extends StatefulWidget {
   const ActivitiesPage({Key? key}) : super(key: key);
 
@@ -24,6 +27,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
   final itemNameController = TextEditingController();
   checklistApiMethods checklistAPI = checklistApiMethods();
 
+<<<<<<< HEAD
   late Future<List<Item>> _myFuture;
   String usercode = 'initialize';
 
@@ -45,6 +49,13 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
   @override
   Widget build(BuildContext context) {
+=======
+  Future<List<Item>> getData() async => await checklistAPI.getData();
+
+  @override
+  Widget build(BuildContext context) {
+    print('build');
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 
     return Scaffold(
       key: scaffoldKey,
@@ -67,7 +78,11 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
       // Activity list
       body: FutureBuilder(
+<<<<<<< HEAD
         future: _myFuture,
+=======
+        future: getData(),
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
         builder: (BuildContext context, AsyncSnapshot<List<Item>> snapshot) {
           Widget page;
 
@@ -126,9 +141,12 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                       .deleteData(item.itemId.toString());
 
                                   if (response) {
+<<<<<<< HEAD
                                     setState(() {
       _myFuture = getData(usercode);
     });
+=======
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
                                     Navigator.pop(context, true);
                                   } else {
                                     Navigator.pop(context, false);
@@ -151,7 +169,11 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                     // Item tile
                     child: CheckboxListTile(
                       title: Text(list[index].itemName),
+<<<<<<< HEAD
                       subtitle: Text(list[index].itemTag),
+=======
+                      subtitle: Text('[Tag]'),
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
                       secondary: const Icon(Icons.keyboard_arrow_left),
                       tileColor: Theme.of(context).colorScheme.surfaceVariant,
                       controlAffinity: ListTileControlAffinity.leading,
@@ -173,6 +195,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
                   // Editing an item
                   onLongPress: () {
+<<<<<<< HEAD
                     Navigator.of(context)
   .push(MaterialPageRoute(
      builder: (context) => UpdateItem(),
@@ -186,6 +209,17 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       _myFuture = getData(usercode);
     });
   });
+=======
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (BuildContext context, _, __) {
+                          return const UpdateItem();
+                        },
+                        settings: RouteSettings(arguments: list[index].itemId),
+                      ),
+                    );
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
                   },
                 );
               },
@@ -208,6 +242,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       // Adding an item
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+<<<<<<< HEAD
          Navigator.of(context)
   .push(MaterialPageRoute(
      builder: (context) => CreateItem(),
@@ -217,6 +252,13 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       _myFuture = getData(usercode);
     });
   });
+=======
+          Navigator.push(context, PageRouteBuilder(
+            pageBuilder: (BuildContext context, _, __) {
+              return const CreateItem();
+            },
+          ));
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
         },
         child: const Icon(Icons.add),
       ),

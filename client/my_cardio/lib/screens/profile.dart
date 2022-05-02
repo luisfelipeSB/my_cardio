@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:my_cardio/common/sharedPreferences.dart';
 import 'package:my_cardio/screens/login.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -6,6 +7,11 @@ import 'package:toggle_switch/toggle_switch.dart';
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
+=======
+import 'package:my_cardio/screens/login.dart';
+import 'package:toggle_switch/toggle_switch.dart';
+
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -14,6 +20,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+<<<<<<< HEAD
   String usercode = '';
 
   @override
@@ -25,6 +32,10 @@ class _ProfilePageState extends State<ProfilePage> {
               usercode = value;
             }));
 
+=======
+  @override
+  Widget build(BuildContext context) {
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
     var colorscheme = Theme.of(context).colorScheme;
     return Column(
       children: [
@@ -76,7 +87,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: IconButton(
                               icon: const Icon(Icons.login_rounded),
                               onPressed: () {
+<<<<<<< HEAD
                                 MySharedPreferences.instance.removeAll();
+=======
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -97,9 +111,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: Column(
+<<<<<<< HEAD
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(usercode), // TODO
+=======
+                    children: [
+                      Text('[user_name] [age]'), // TODO
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
                       Text('other information...'),
                     ],
                   ),

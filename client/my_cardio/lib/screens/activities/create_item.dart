@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_cardio/common/apiChecklist.dart';
 
+<<<<<<< HEAD
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/sharedPreferences.dart';
 
+=======
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 class CreateItem extends StatefulWidget {
   const CreateItem({Key? key}) : super(key: key);
 
@@ -17,6 +20,7 @@ class _CreateItemState extends State<CreateItem> {
   final itemNameController = TextEditingController();
   checklistApiMethods checklistAPI = checklistApiMethods();
 
+<<<<<<< HEAD
   String usercode = '';
   late String selectedTag;
 
@@ -35,6 +39,10 @@ class _CreateItemState extends State<CreateItem> {
               usercode = value;
             }));
             
+=======
+  @override
+  Widget build(BuildContext context) {
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add item'),
@@ -61,15 +69,23 @@ class _CreateItemState extends State<CreateItem> {
                   child: Text(value),
                 );
               }).toList(),
+<<<<<<< HEAD
               value: selectedTag,
               onChanged: (String? value) {
                 selectedTag = value!;
               },
+=======
+              onChanged: (String? value) {},
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
             ),
             ElevatedButton(
               onPressed: () async {
                 bool response =
+<<<<<<< HEAD
                     await checklistAPI.createData(itemNameController.text,selectedTag,usercode);
+=======
+                    await checklistAPI.createData(itemNameController.text);
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 
                 if (response) {
                   Navigator.pop(context);

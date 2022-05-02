@@ -5,12 +5,17 @@ import 'package:my_cardio/screens/cardiac_data.dart';
 import 'package:my_cardio/screens/risks.dart';
 import 'package:my_cardio/screens/profile.dart';
 
+<<<<<<< HEAD
 import '../common/sharedPreferences.dart';
 import '../models/user.dart';
 
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
+=======
+import '../models/user.dart';
+
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -20,6 +25,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+<<<<<<< HEAD
   String usercode = '';
 
   @override
@@ -32,6 +38,13 @@ class _HomePageState extends State<HomePage> {
         .then((value) => setState(() {
               usercode = value;
             }));
+=======
+
+  @override
+  Widget build(BuildContext context) {
+    final User user = ModalRoute.of(context)!.settings.arguments as User;
+    print(user.code);
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
 
     final colorscheme = Theme.of(context).colorScheme;
     return Scaffold(
@@ -84,10 +97,17 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+<<<<<<< HEAD
                         children:  [
                           // TODO adaptive username and password + style
                           Text('Good Morning'),
                           Text('$usercode'),
+=======
+                        children: const [
+                          // TODO adaptive username and password + style
+                          Text('Good Morning'),
+                          Text('[user_name]'),
+>>>>>>> 89668093c0bf086f25b4c438b461f14915e6e73d
                           Text('Hope you have a nice day!'),
                         ],
                       ),
