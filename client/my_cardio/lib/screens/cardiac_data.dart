@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_cardio/common/apiCardiacData.dart';
+import 'package:my_cardio/models/measurement.dart';
 
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../common/sharedPreferences.dart';
 
 class CardiacDataPage extends StatefulWidget {
   const CardiacDataPage({Key? key}) : super(key: key);
@@ -15,10 +18,32 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   CardiacDataApiMethods cardiacDataAPI = CardiacDataApiMethods();
 
-  Future<Object> getData() async => await cardiacDataAPI.getData();
+  late Future<List<Measurement>> _myFuture;
+  String usercode = 'initialize';
+
+  @override
+  void initState() {
+    MySharedPreferences.instance
+        .getStringValue("usercode")
+        .then((value) => setState(() {
+              usercode = value;
+              _myFuture = getData(usercode);
+            }));
+    _myFuture = getData(usercode);
+    super.initState();
+  }
+
+  Future<List<Measurement>> getData(code) async =>
+      await cardiacDataAPI.getData(code);
 
   @override
   Widget build(BuildContext context) {
+    MySharedPreferences.instance
+        .getStringValue("usercode")
+        .then((value) => setState(() {
+              usercode = value;
+            }));
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
@@ -26,9 +51,17 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
         preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
           title: const Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Text('Cardiac History')),
+              padding: EdgeInsets.only(top: 20), child: Text('Cardiac Risks')),
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),
@@ -41,7 +74,7 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
 
       // Cardiac data dashboard
       body: FutureBuilder(
-        future: getData(),
+        future: getData(usercode),
         builder: (BuildContext context, AsyncSnapshot<Object> snapshot) {
           Widget page;
 
@@ -65,9 +98,9 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
             page = Container();
 
             // Got data
-            // TODO check if has data too
           } else if (snapshot.hasData) {
-            Object? data = snapshot.data;
+            String? data = snapshot.data.toString();
+            print(data);
             page = Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

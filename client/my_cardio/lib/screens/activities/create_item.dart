@@ -15,7 +15,7 @@ class CreateItem extends StatefulWidget {
 
 class _CreateItemState extends State<CreateItem> {
   final itemNameController = TextEditingController();
-  checklistApiMethods checklistAPI = checklistApiMethods();
+  ChecklistApiMethods checklistAPI = ChecklistApiMethods();
 
   String usercode = '';
   late String selectedTag;
@@ -24,17 +24,16 @@ class _CreateItemState extends State<CreateItem> {
   void initState() {
     selectedTag = "Exercise";
     super.initState();
-   }
+  }
 
   @override
   Widget build(BuildContext context) {
-
     MySharedPreferences.instance
         .getStringValue("usercode")
         .then((value) => setState(() {
               usercode = value;
             }));
-            
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add item'),
@@ -68,8 +67,8 @@ class _CreateItemState extends State<CreateItem> {
             ),
             ElevatedButton(
               onPressed: () async {
-                bool response =
-                    await checklistAPI.createData(itemNameController.text,selectedTag,usercode);
+                bool response = await checklistAPI.createData(
+                    itemNameController.text, selectedTag, usercode);
 
                 if (response) {
                   Navigator.pop(context);

@@ -48,7 +48,7 @@ class _RisksPageState extends State<RisksPage> {
         ),
       ),
 
-      // Cardiac data dashboard
+      // Risks dashboard
       body: FutureBuilder(
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot<Object> snapshot) {

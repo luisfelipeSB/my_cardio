@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:badges/src/badge.dart';
+import 'package:my_cardio/models/measurement.dart';
 import 'package:my_cardio/screens/activities/activities.dart';
 import 'package:my_cardio/screens/cardiac_data.dart';
 import 'package:my_cardio/screens/risks.dart';
 import 'package:my_cardio/screens/profile.dart';
 
 import '../common/sharedPreferences.dart';
+import '../models/item.dart';
 import '../models/user.dart';
 
 import 'dart:developer';
@@ -20,133 +24,148 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  String usercode = '';
+
+  User user = User(codigo: -1, data_nascimento: DateTime(0), sexo: '');
+
+  Future<void> initUser() async {
+    await MySharedPreferences.instance.getStringValue("user").then((value) {
+      setState(() {
+        if (value.isNotEmpty) {
+          user = User.fromJson(jsonDecode(value));
+        }
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    initUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    /*final usercode = ModalRoute.of(context)!.settings.arguments;
-    log('usercode: $usercode');*/
-
-    MySharedPreferences.instance
-        .getStringValue("usercode")
-        .then((value) => setState(() {
-              usercode = value;
-            }));
-
     final colorscheme = Theme.of(context).colorScheme;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
         children: [
+          // Top row
           Container(
-            margin: const EdgeInsets.only(top: 60),
-            width: MediaQuery.of(context).size.width * 0.85,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // Top row
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            decoration: BoxDecoration(
+              color: colorscheme.secondaryContainer,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Top icons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+                      // Profile
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  Scaffold(body: ProfilePage()),
+                              builder: (context) => const ProfilePage(),
                             ),
                           );
                         },
                         child: Container(
-                          width: 60,
-                          height: 60,
-                          child: Icon(Icons.account_circle, size: 60), // TODO
+                          decoration: BoxDecoration(
+                            color: colorscheme.background,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.tips_and_updates_outlined,
+                              size: 35,
+                              color: colorscheme.inverseSurface,
+                            ),
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        width: 150,
-                        height: 60,
-                        child: Image.asset('assets/images/logo-horiz.png'),
-                      ),
-                    ],
-                  ),
-                ),
 
-                // Welcome message
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children:  [
-                          // TODO adaptive username and password + style
-                          Text('Good Morning'),
-                          Text('$usercode'),
-                          Text('Hope you have a nice day!'),
-                        ],
+                      // Profile picture
+                      Icon(
+                        Icons.account_circle,
+                        size: 120,
+                        color: colorscheme.background,
                       ),
-                    ],
-                  ),
-                ),
 
-                // Notifications
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Badge(
-                            badgeContent: Text('1'), // TODO
-                            child: const Icon(Icons.notifications, size: 55),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Row(
-                            // TODO
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16),
-                                child: Icon(
-                                  Icons.circle,
-                                  color: colorscheme.secondary,
-                                  size: 50,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16),
-                                child: Icon(
-                                  Icons.circle,
-                                  color: colorscheme.tertiary,
-                                  size: 50,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16),
-                                child: Icon(
-                                  Icons.circle,
-                                  color: colorscheme.primary,
-                                  size: 50,
-                                ),
-                              ),
-                            ],
+                      // Notifications
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProfilePage(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: colorscheme.background,
+                            shape: BoxShape.circle,
                           ),
-                        ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Badge(
+                              badgeContent: Text('1'),
+                              badgeColor: colorscheme.onPrimary,
+                              child: Icon(
+                                Icons.notifications_outlined,
+                                size: 35,
+                                color: colorscheme.inverseSurface,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
 
-                // Panels
+                  // Name
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          '${user.codigo}',
+                          style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Panels
+          Container(
+            margin: EdgeInsets.only(top: screenHeight * 0.01),
+            width: screenWidth * 0.85,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Row(
@@ -157,14 +176,14 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             // Main panel
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 20.0),
+                              padding: const EdgeInsets.only(bottom: 10.0),
                               child: InkWell(
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          Scaffold(body: CardiacDataPage()),
+                                          const CardiacDataPage(),
                                     ),
                                   );
                                 },
@@ -184,12 +203,13 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   child: Row(
                                     children: [
-                                      const Padding(
-                                        padding: EdgeInsets.symmetric(
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: 15.0),
                                         child: Icon(
-                                          Icons.monitor_heart_rounded,
+                                          Icons.medical_services_outlined,
                                           size: 50,
+                                          color: colorscheme.background,
                                         ),
                                       ),
                                       Column(
@@ -197,9 +217,20 @@ class _HomePageState extends State<HomePage> {
                                             MainAxisAlignment.center,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        children: const [
-                                          Text('Cardiac Data'),
-                                          Text('Check your heart\'s health'),
+                                        children: [
+                                          Text(
+                                            'Dados Cardíacos',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: colorscheme.background),
+                                          ),
+                                          Text(
+                                            'Acompanhe sua saúde cardíaca',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: colorscheme.background),
+                                          ),
                                         ],
                                       )
                                     ],
@@ -209,106 +240,140 @@ class _HomePageState extends State<HomePage> {
                             ),
 
                             // Minor panels
-                            Row(
+                            Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 // Panel 1
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            Scaffold(body: RisksPage()),
-                                      ),
-                                    );
-                                  },
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          color: colorscheme.primary,
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const RisksPage(),
                                         ),
-                                        child: Row(
-                                          children: [
-                                            const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10.0),
-                                              child: Icon(
-                                                Icons.error,
-                                                size: 40,
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                            color: colorscheme.secondary,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15.0),
+                                                child: Icon(
+                                                  Icons.monitor_heart_outlined,
+                                                  size: 40,
+                                                  color: colorscheme.background,
+                                                ),
                                               ),
-                                            ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: const [
-                                                Text('Patterns'),
-                                                Text('Risks found'),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Riscos',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: colorscheme
+                                                          .background,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    'Padrões detetados',
+                                                    style: TextStyle(
+                                                        color: colorscheme
+                                                            .background),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
 
                                 // Panel 2
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            Scaffold(body: ActivitiesPage()),
-                                      ),
-                                    );
-                                  },
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.40,
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          color: colorscheme.secondary,
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ActivitiesPage(),
                                         ),
-                                        child: Row(
-                                          children: [
-                                            const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10.0),
-                                              child: Icon(
-                                                Icons.edit_note_rounded,
-                                                size: 40,
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                            color: colorscheme.tertiary,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15.0),
+                                                child: Icon(
+                                                  Icons.edit_note_rounded,
+                                                  size: 40,
+                                                  color: colorscheme.background,
+                                                ),
                                               ),
-                                            ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: const [
-                                                Text('Activities'),
-                                                Text('Take notes'),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Checklist',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: colorscheme
+                                                          .background,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    'Minhas atividades',
+                                                    style: TextStyle(
+                                                        color: colorscheme
+                                                            .background),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],

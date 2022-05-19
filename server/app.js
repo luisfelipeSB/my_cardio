@@ -17,5 +17,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/users', userRouter);
 app.use('/api/checklist', checklistRouter);
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
+
 module.exports = app;
 

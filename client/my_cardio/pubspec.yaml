@@ -30,7 +30,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  provider: ^6.0.2
   http: ^0.13.4
   toggle_switch: ^2.0.1
   badges: ^2.0.2

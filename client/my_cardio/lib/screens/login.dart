@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:my_cardio/main.dart';
 import 'package:my_cardio/screens/home.dart';
+import 'package:my_cardio/screens/profile.dart';
 
 import '../common/apiUser.dart';
 import '../common/sharedPreferences.dart';
@@ -18,24 +20,16 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController patientCodeController = TextEditingController();
-  TextEditingController patientLoginController = TextEditingController();
+  TextEditingController patientPassController = TextEditingController();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   UserApiMethods userAPI = UserApiMethods();
 
-  /*Future<User> _login(user) async => await userAPI.login(user);*/
-
-  /*bool _validateCredentialsFormat(code, password) {
-    // TODO password length?
-    if (password.length != 4) return false;
-    if (code == null) return false;
-    return double.tryParse(code) != null;
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -54,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.all(30.0),
                         child: Image.asset(
                           'assets/images/logo-alt.png',
-                          height: 240,
+                          height: 200,
                         ),
                       ),
 
@@ -64,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: TextFormField(
                           controller: patientCodeController,
                           decoration: InputDecoration(
-                            labelText: 'Enter your patient code...',
+                            labelText: 'Código de paciente',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -76,10 +70,10 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                          controller: patientLoginController,
+                          controller: patientPassController,
                           obscureText: true,
                           decoration: InputDecoration(
-                            labelText: 'Enter your password...',
+                            labelText: 'Senha',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -87,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
 
-                      // Button
+                      // Login button
                       Padding(
                         padding: const EdgeInsets.only(top: 30.0),
                         child: ElevatedButton(
@@ -101,26 +95,41 @@ class _LoginPageState extends State<LoginPage> {
                           // Verifying credentials
                           onPressed: () async {
                             final String code = patientCodeController.text;
-                            final String password = patientLoginController.text;
+                            final String password = patientPassController.text;
 
-                            bool response = await userAPI.login(code,password);
+                            var res = await userAPI.login(code, password);
 
-                            if(response) {
-                                MySharedPreferences.instance.setStringValue("usercode", code);
+                            if (res.runtimeType == bool && res) {
+                              await MySharedPreferences.instance
+                                  .setStringValue("usercode", code);
+
                               Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder: (BuildContext context, _, __) {
-                                      return const Scaffold(body: HomePage());
-                                    },
-                                    /*settings: RouteSettings(arguments: code),*/
-                                  ),
-                                );
-                            } else {
-                                showDialog(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomePage(),
+                                ),
+                              );
+                            } else if (res.runtimeType == ClientException) {
+                              showDialog(
                                 context: context,
                                 builder: (_) => AlertDialog(
-                                  title: const Text('Incorrect credentials'),
+                                  title: const Text('Erro'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                barrierDismissible: true,
+                              );
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: const Text('Credenciais inválidas'),
                                   actions: <Widget>[
                                     TextButton(
                                       child: const Text('OK'),
@@ -133,46 +142,10 @@ class _LoginPageState extends State<LoginPage> {
                                 barrierDismissible: true,
                               );
                             }
-                            /*
-                            // Validating format
-                            if (_validateCredentialsFormat(code, password)) {
-                              User user = await _login(usr);
-
-                              // Logging in
-                              if (user.code == int.parse(code)) {
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder: (BuildContext context, _, __) {
-                                      return const Scaffold(body: HomePage());
-                                    },
-                                    settings: RouteSettings(arguments: user),
-                                  ),
-                                );
-                              }
-                            
-                              // TODO Showing error message
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  title: const Text('Incorrect credentials'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: const Text('OK'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                barrierDismissible: true,
-                              );
-                            }*/
                           },
                           child: const Text(
-                            'Login',
-                            style: TextStyle(fontSize: 20),
+                            'Entrar',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
                           ),
                         ),
                       ),

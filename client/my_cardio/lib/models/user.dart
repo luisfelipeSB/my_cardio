@@ -1,22 +1,30 @@
 class User {
-  final int code;
-  final String sex;
-  final DateTime birthDate;
-  final String dead;
+  final int codigo;
+  //final String nome;
+  final String sexo;
+  final DateTime data_nascimento;
 
   User({
-    required this.code,
-    required this.sex,
-    required this.birthDate,
-    required this.dead,
+    required this.codigo,
+    //required this.nome,
+    required this.sexo,
+    required this.data_nascimento,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      code: json['codigo'],
-      sex: json['sexo'],
-      birthDate: json['data_nascimento'],
-      dead: json['falecido'],
+    User user = User(
+      codigo: json['codigo'] as int,
+      //nome: json['nome'] as String,
+      sexo: json['sexo'] as String,
+      data_nascimento: DateTime.parse(json['data_nascimento'].toString()),
     );
+    return user;
   }
+
+  Map<String, dynamic> toJson() => {
+        'codigo': codigo,
+        //'nome': nome,
+        'sexo': sexo,
+        'data_nascimento': data_nascimento,
+      };
 }

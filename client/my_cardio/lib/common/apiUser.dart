@@ -1,34 +1,29 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 
-import '../models/user.dart';
-
-// TODO replace '1' with actual userId
-// TODO replace BASE_URI after deploy - OR ADD IT TO A CONSTANTS FILE
+import 'constants.dart';
+import 'sharedPreferences.dart';
 
 class UserApiMethods {
-  static const String BASE_URI = 'http://10.0.2.2:3000';
-
-  Future login(code,password) async {
+  Future login(codigo, password) async {
     try {
       final response = await http.post(Uri.parse('$BASE_URI/api/users/login'),
-        headers: {
-          'Content-Type': 'application/json',
+          headers: {
+            'Content-Type': 'application/json',
           },
-          body: jsonEncode({'codigo': code, 'password': password}));
+          body: jsonEncode({'codigo': codigo, 'password': password}));
 
       if (response.statusCode == 200) {
-        /*Iterable it = jsonDecode(response.body);
-        final User user = it.map((e) => User.fromJson(e)) as User;
-        return user;*/
+        Map<String, dynamic> res = jsonDecode(response.body);
+        await MySharedPreferences.instance
+            .setStringValue('user', jsonEncode(res).toString());
         return true;
       } else {
         return false;
       }
-    } catch (e) {
-      return e;
+    } catch (error) {
+      return error;
     }
   }
 
@@ -47,6 +42,5 @@ class UserApiMethods {
       return e.toString();
     }
   }*/
-
 
 }

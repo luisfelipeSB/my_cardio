@@ -13,19 +13,18 @@ class UpdateItem extends StatefulWidget {
 
 class _UpdateItemState extends State<UpdateItem> {
   final itemNameController = TextEditingController();
-  checklistApiMethods checklistAPI = checklistApiMethods();
+  ChecklistApiMethods checklistAPI = ChecklistApiMethods();
 
   late String selectedTag;
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments as List<String>;
-     if(args[1].isNotEmpty) {
+    if (args[1].isNotEmpty) {
       itemNameController.text = args[1];
     }
 
     selectedTag = args[2];
-    
 
     return Scaffold(
       appBar: AppBar(

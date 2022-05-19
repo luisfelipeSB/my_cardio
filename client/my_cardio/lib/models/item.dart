@@ -1,18 +1,18 @@
-class Item {
+class ChecklistItem {
   final int itemId;
   String itemName;
   String itemTag;
   bool itemCheck;
 
-  Item({
+  ChecklistItem({
     required this.itemId,
     required this.itemName,
     required this.itemTag,
     required this.itemCheck,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) {
-    return Item(
+  factory ChecklistItem.fromJson(Map<String, dynamic> json) {
+    return ChecklistItem(
       itemId: json['item_id'],
       itemName: json['item_name'],
       itemTag: json['item_category'],
