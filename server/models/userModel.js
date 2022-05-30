@@ -14,6 +14,20 @@ module.exports.login = async function (user) {
   }
 }
 
+module.exports.getProfile = async function (id) {
+  try {
+    let sql = "select * from dnt_doente where codigo = $1";
+    let result = await pool.query(sql, [id]);
+    
+    if (result.rows.length > 0)
+      return { status: 200, result: result.rows[0] };
+    else return { status: 404, result: { msg: "User not found" } };
+  } catch (err) {
+    console.log(err);
+    return { status: 500, result: err };
+  }
+}
+
 /*----- CARDIAC DATA -----*/
 
 module.exports.getUserCardiacData = async (uid) => {

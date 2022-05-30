@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_cardio/common/apiChecklist.dart';
 import 'package:my_cardio/screens/activities/create_item.dart';
 import 'package:my_cardio/screens/activities/update_item.dart';
-import 'package:my_cardio/models/item.dart';
+import 'package:my_cardio/models/checklistItem.dart';
 
 import '../../common/sharedPreferences.dart';
 
@@ -40,9 +40,12 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(usercode);
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
+
+      // App Bar
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: AppBar(
@@ -57,7 +60,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
             ),
           ),
           title: const Padding(
-              padding: EdgeInsets.only(top: 20), child: Text('Activities')),
+              padding: EdgeInsets.only(top: 20), child: Text('Atividades')),
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),
@@ -84,7 +87,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                   CircularProgressIndicator(),
                   Padding(
                     padding: EdgeInsets.only(top: 16.0),
-                    child: Text('Fetching your checklist...'),
+                    child: Text('A buscar sua lista...'),
                   ),
                 ],
               ),
@@ -93,7 +96,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
             // Error
           } else if (snapshot.hasError) {
             page = const Center(
-              child: Text('An error occurred :('),
+              child: Text('Ocorreu um erro :('),
             );
 
             // Got data
@@ -121,8 +124,8 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text('Delete item'),
-                            content: const Text('Are you sure?'),
+                            title: const Text('Deletar item'),
+                            content: const Text('Tens certeza?'),
                             actions: [
                               TextButton(
                                 onPressed: () async {
@@ -138,13 +141,13 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                                     Navigator.pop(context, false);
                                   }
                                 },
-                                child: const Text('Yes'),
+                                child: const Text('Sim'),
                               ),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context, false);
                                 },
-                                child: const Text('No'),
+                                child: const Text('Não'),
                               ),
                             ],
                           );
@@ -201,9 +204,9 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
             page = Center(
               child: Column(
                 children: const [
-                  Text('No items'),
-                  Text('Add an item by selecting (+)'),
-                  Text('Long press an item to edit it'),
+                  Text('Lista vazia'),
+                  Text('Selecione (+) para adicionar um item'),
+                  Text('Mantenha um item pressionado para editá-lo'),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
               ),

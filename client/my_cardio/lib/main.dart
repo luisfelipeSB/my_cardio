@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_cardio/screens/activities/activities.dart';
 import 'package:my_cardio/screens/login.dart';
 import 'package:my_cardio/common/colorScheme.dart';
 

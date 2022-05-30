@@ -37,7 +37,8 @@ class _RisksPageState extends State<RisksPage> {
             ),
           ),
           title: const Padding(
-              padding: EdgeInsets.only(top: 20), child: Text('Cardiac Risks')),
+              padding: EdgeInsets.only(top: 20),
+              child: Text('Riscos Cardíacos')),
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),

@@ -2,6 +2,7 @@ var pool = require("./connection");
 const tf = require("@tensorflow/tfjs");
 
 module.exports.insertChecklistItem = async function(checklist) {
+    console.log(checklist)
     try {
         let sql ="insert into checklist (item_name, item_check, item_category, user_id_FK) values ($1, false, $2, $3);";
         let result = await pool.query(sql,[checklist.item_name,checklist.item_category,checklist.user_id_FK]);

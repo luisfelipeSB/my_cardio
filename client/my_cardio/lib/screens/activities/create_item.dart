@@ -22,7 +22,7 @@ class _CreateItemState extends State<CreateItem> {
 
   @override
   void initState() {
-    selectedTag = "Exercise";
+    selectedTag = "Exercício";
     super.initState();
   }
 
@@ -36,8 +36,12 @@ class _CreateItemState extends State<CreateItem> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add item'),
+        title: const Text(
+          'Adicionar item',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -45,15 +49,15 @@ class _CreateItemState extends State<CreateItem> {
           children: [
             TextField(
               controller: itemNameController,
-              decoration: const InputDecoration(hintText: 'Item name'),
+              decoration: const InputDecoration(hintText: 'Título'),
             ),
             DropdownButtonFormField(
               items: <String>[
-                'Exercise',
-                'Build a skill',
-                'Family & friends',
-                'Me time',
-                'Organize'
+                'Exercício',
+                'Desenvolver habilidade',
+                'Família e amigos',
+                'Atividae pessoal',
+                'Organizar a vida'
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -65,18 +69,27 @@ class _CreateItemState extends State<CreateItem> {
                 selectedTag = value!;
               },
             ),
-            ElevatedButton(
-              onPressed: () async {
-                bool response = await checklistAPI.createData(
-                    itemNameController.text, selectedTag, usercode);
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                onPressed: () async {
+                  bool response = await checklistAPI.createData(
+                      itemNameController.text, selectedTag, usercode);
 
-                if (response) {
-                  Navigator.pop(context);
-                } else {
-                  const SnackBar(content: Text('Failed to add item'));
-                }
-              },
-              child: const Text('Inserir'),
+                  if (response) {
+                    Navigator.pop(context);
+                  } else {
+                    const SnackBar(content: Text('Falha ao adicionar item'));
+                  }
+                },
+                child: const Text('Inserir',
+                    style: TextStyle(color: Colors.white)),
+              ),
             ),
           ],
         ),

@@ -9,8 +9,8 @@ import 'package:my_cardio/screens/risks.dart';
 import 'package:my_cardio/screens/profile.dart';
 
 import '../common/sharedPreferences.dart';
-import '../models/item.dart';
-import '../models/user.dart';
+import '../models/checklistItem.dart';
+import '../models/userProfileData.dart';
 
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,21 +25,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  User user = User(codigo: -1, data_nascimento: DateTime(0), sexo: '');
-
-  Future<void> initUser() async {
-    await MySharedPreferences.instance.getStringValue("user").then((value) {
-      setState(() {
-        if (value.isNotEmpty) {
-          user = User.fromJson(jsonDecode(value));
-        }
-      });
-    });
-  }
+  String usercode = '';
 
   @override
   void initState() {
-    initUser();
+    MySharedPreferences.instance
+        .getStringValue("usercode")
+        .then((value) => setState(() {
+              usercode = value;
+            }));
     super.initState();
   }
 
@@ -59,8 +53,8 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(
               color: colorscheme.secondaryContainer,
               borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25),
+                bottomLeft: Radius.circular(40),
+                bottomRight: Radius.circular(40),
               ),
             ),
             child: Padding(
@@ -91,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
-                              Icons.tips_and_updates_outlined,
+                              Icons.info_outline,
                               size: 35,
                               color: colorscheme.inverseSurface,
                             ),
@@ -145,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Text(
-                          '${user.codigo}',
+                          '${usercode}',
                           style: const TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
@@ -207,8 +201,8 @@ class _HomePageState extends State<HomePage> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 15.0),
                                         child: Icon(
-                                          Icons.medical_services_outlined,
-                                          size: 50,
+                                          Icons.insights,
+                                          size: 60,
                                           color: colorscheme.background,
                                         ),
                                       ),
@@ -226,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                                                 color: colorscheme.background),
                                           ),
                                           Text(
-                                            'Acompanhe sua saúde cardíaca',
+                                            'Acompanhe sua saúde',
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 color: colorscheme.background),

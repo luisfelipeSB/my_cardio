@@ -2,18 +2,25 @@ var express = require('express');
 var router = express.Router();
 var userModel = require("../models/userModel");
 
+router.post('/login', async function (req, res, next) {
+  let user = req.body;
+  let result = await userModel.login(user);
+  res.status(result.status).send(result.result);
+});
+
+router.get('/:id', async function (req, res, next) {
+  let id = req.params.id;
+  console.log("Sending user " + id + "profile data");
+  let result = await userModel.getProfile(id);
+  res.status(result.status).send(result.result);
+});
+
 /*----- CHECKLIST -----*/
 
 router.get('/:id/checklist/items', async function (req, res, next) {
   let id = req.params.id;
   console.log("Sending checklist items of user with id " + id);
   let result = await userModel.getChecklistItems(id);
-  res.status(result.status).send(result.result);
-});
-
-router.post('/login', async function (req, res, next) {
-  let user = req.body;
-  let result = await userModel.login(user);
   res.status(result.status).send(result.result);
 });
 

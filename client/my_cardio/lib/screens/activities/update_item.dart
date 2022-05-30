@@ -23,13 +23,18 @@ class _UpdateItemState extends State<UpdateItem> {
     if (args[1].isNotEmpty) {
       itemNameController.text = args[1];
     }
+    var colorscheme = Theme.of(context).colorScheme;
 
     selectedTag = args[2];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Update item'),
+        title: const Text(
+          'Atualizar item',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -37,15 +42,15 @@ class _UpdateItemState extends State<UpdateItem> {
           children: [
             TextField(
               controller: itemNameController,
-              decoration: const InputDecoration(hintText: 'New item name'),
+              decoration: const InputDecoration(hintText: 'Novo título'),
             ),
             DropdownButtonFormField(
               items: <String>[
-                'Exercise',
-                'Build a skill',
-                'Family & friends',
-                'Me time',
-                'Organize'
+                'Exercício',
+                'Desenvolver habilidade',
+                'Família e amigos',
+                'Atividae pessoal',
+                'Organizar a vida'
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -57,18 +62,30 @@ class _UpdateItemState extends State<UpdateItem> {
                 selectedTag = value!;
               },
             ),
-            ElevatedButton(
-              onPressed: () async {
-                bool response = await checklistAPI.updateData(
-                    args[0], itemNameController.text, selectedTag);
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(160, 55),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                onPressed: () async {
+                  bool response = await checklistAPI.updateData(
+                      args[0], itemNameController.text, selectedTag);
 
-                if (response) {
-                  Navigator.pop(context);
-                } else {
-                  const SnackBar(content: Text('Failed to add item'));
-                }
-              },
-              child: const Text('Update'),
+                  if (response) {
+                    Navigator.pop(context);
+                  } else {
+                    const SnackBar(content: Text('Falha ao atualizar item'));
+                  }
+                },
+                child: const Text(
+                  'Atualizar',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ),
           ],
         ),

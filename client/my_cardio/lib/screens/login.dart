@@ -6,7 +6,7 @@ import 'package:my_cardio/screens/profile.dart';
 
 import '../common/apiUser.dart';
 import '../common/sharedPreferences.dart';
-import '../models/user.dart';
+import '../models/userProfileData.dart';
 
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                               showDialog(
                                 context: context,
                                 builder: (_) => AlertDialog(
-                                  title: const Text('Erro'),
+                                  title: const Text('Erro de servidor'),
                                   actions: <Widget>[
                                     TextButton(
                                       child: const Text('OK'),

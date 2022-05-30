@@ -38,12 +38,6 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
 
   @override
   Widget build(BuildContext context) {
-    MySharedPreferences.instance
-        .getStringValue("usercode")
-        .then((value) => setState(() {
-              usercode = value;
-            }));
-
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
@@ -61,7 +55,8 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
             ),
           ),
           title: const Padding(
-              padding: EdgeInsets.only(top: 20), child: Text('Cardiac Risks')),
+              padding: EdgeInsets.only(top: 20),
+              child: Text('Dados Cardíacos')),
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),
@@ -87,7 +82,7 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
                   CircularProgressIndicator(),
                   Padding(
                     padding: EdgeInsets.only(top: 16.0),
-                    child: Text('Fetching your cardiac data...'),
+                    child: Text('A buscar seus dados'),
                   ),
                 ],
               ),

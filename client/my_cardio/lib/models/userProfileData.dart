@@ -1,18 +1,18 @@
-class User {
+class UserProfileData {
   final int codigo;
   //final String nome;
   final String sexo;
   final DateTime data_nascimento;
 
-  User({
+  UserProfileData({
     required this.codigo,
     //required this.nome,
     required this.sexo,
     required this.data_nascimento,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    User user = User(
+  factory UserProfileData.fromJson(Map<String, dynamic> json) {
+    UserProfileData user = UserProfileData(
       codigo: json['codigo'] as int,
       //nome: json['nome'] as String,
       sexo: json['sexo'] as String,
