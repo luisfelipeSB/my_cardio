@@ -42,7 +42,7 @@ class _RisksPageState extends State<RisksPage> {
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),
-              child: Image.asset('assets/images/logo-horiz.png',
+              child: Image.asset('assets/images/logo-horiz-alt.png',
                   width: 100, height: 80, fit: BoxFit.contain),
             ),
           ],

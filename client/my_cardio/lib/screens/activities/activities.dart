@@ -40,7 +40,6 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(usercode);
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
@@ -64,7 +63,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),
-              child: Image.asset('assets/images/logo-horiz.png',
+              child: Image.asset('assets/images/logo-horiz-alt.png',
                   width: 100, height: 80, fit: BoxFit.contain),
             ),
           ],
@@ -78,7 +77,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
             AsyncSnapshot<List<ChecklistItem>> snapshot) {
           Widget page;
 
-          // Waiting to get items
+          // Waiting to get data
           if (snapshot.connectionState == ConnectionState.waiting) {
             page = Center(
               child: Column(

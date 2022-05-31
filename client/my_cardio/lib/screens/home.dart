@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:badges/src/badge.dart';
 import 'package:my_cardio/models/measurement.dart';
 import 'package:my_cardio/screens/activities/activities.dart';
-import 'package:my_cardio/screens/cardiac_data.dart';
+import 'package:my_cardio/screens/cardiac_data/cardiac_data_select.dart';
 import 'package:my_cardio/screens/risks.dart';
 import 'package:my_cardio/screens/profile.dart';
 
@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          const CardiacDataPage(),
+                                          const CardiacDataSelectPage(),
                                     ),
                                   );
                                 },

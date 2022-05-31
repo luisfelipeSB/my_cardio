@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_cardio/common/apiCardiacData.dart';
 import 'package:my_cardio/models/measurement.dart';
+import 'package:my_cardio/screens/cardiac_data/graph.dart';
 
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../common/sharedPreferences.dart';
+import '../../common/sharedPreferences.dart';
 
 class CardiacDataPage extends StatefulWidget {
   const CardiacDataPage({Key? key}) : super(key: key);
@@ -18,8 +19,9 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   CardiacDataApiMethods cardiacDataAPI = CardiacDataApiMethods();
 
-  late Future<List<Measurement>> _myFuture;
+  late Future<List<List<Measurement>>> _myFuture;
   String usercode = 'initialize';
+  List<int> datatypes = [];
 
   @override
   void initState() {
@@ -27,20 +29,33 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
         .getStringValue("usercode")
         .then((value) => setState(() {
               usercode = value;
-              _myFuture = getData(usercode);
             }));
-    _myFuture = getData(usercode);
+    MySharedPreferences.instance
+        .getStringValue("datatypes")
+        .then((value) => setState(() {
+              value = value.substring(1, value.length - 1);
+              List<String> values = value.split(',');
+              for (final v in values) {
+                datatypes.add(int.parse(v));
+              }
+              _myFuture = getData(usercode, datatypes);
+            }));
+    _myFuture = getData(usercode, datatypes);
     super.initState();
   }
 
-  Future<List<Measurement>> getData(code) async =>
-      await cardiacDataAPI.getData(code);
+  Future<List<List<Measurement>>> getData(usercode, datatypes) async =>
+      await cardiacDataAPI.getData(usercode, datatypes);
 
   @override
   Widget build(BuildContext context) {
+    final colorscheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
+
+      // App Bar
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: AppBar(
@@ -55,12 +70,11 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
             ),
           ),
           title: const Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Text('Dados Cardíacos')),
+              padding: EdgeInsets.only(top: 20), child: Text('Dashboard')),
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),
-              child: Image.asset('assets/images/logo-horiz.png',
+              child: Image.asset('assets/images/logo-horiz-alt.png',
                   width: 100, height: 80, fit: BoxFit.contain),
             ),
           ],
@@ -69,11 +83,11 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
 
       // Cardiac data dashboard
       body: FutureBuilder(
-        future: getData(usercode),
-        builder: (BuildContext context, AsyncSnapshot<Object> snapshot) {
+        future: _myFuture,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
           Widget page;
 
-          // Waiting to get items
+          // Waiting to get data
           if (snapshot.connectionState == ConnectionState.waiting) {
             page = Center(
               child: Column(
@@ -82,7 +96,7 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
                   CircularProgressIndicator(),
                   Padding(
                     padding: EdgeInsets.only(top: 16.0),
-                    child: Text('A buscar seus dados'),
+                    child: Text('A buscar seus dados...'),
                   ),
                 ],
               ),
@@ -90,27 +104,43 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
 
             // Error
           } else if (snapshot.hasError) {
-            page = Container();
+            log(snapshot.error.toString());
+            page = const Center(
+              child: Text('Ocorreu um erro :('),
+            );
 
             // Got data
-          } else if (snapshot.hasData) {
-            String? data = snapshot.data.toString();
-            print(data);
-            page = Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+            List<List<Measurement>>? measurements = snapshot.data;
+
+            /*
+            for (int i = 0; i < measurements!.length; i++) {
+              log('----- type ${datatypes[i]} -----');
+              for (int j = 0; j < measurements[i].length; j++) {
+                log(measurements[i][j].toJson().toString());
+              }
+            }
+            */
+            page = Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 30),
-                  width: MediaQuery.of(context).size.width * 0.85,
-                  color: Colors.green,
-                  child: Center(child: Text('Dashboard goes here')),
-                ),
+                // Graph
+                Graph(),
+
+                // Additional info
+                Text("More data for data types $datatypes"),
               ],
             );
 
             // No data
           } else {
-            page = Container();
+            page = Center(
+              child: Column(
+                children: const [
+                  Text('Sem dados cardíacos deste tipo'),
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              ),
+            );
           }
           return page;
         },

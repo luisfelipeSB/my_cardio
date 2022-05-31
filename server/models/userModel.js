@@ -30,30 +30,73 @@ module.exports.getProfile = async function (id) {
 
 /*----- CARDIAC DATA -----*/
 
-module.exports.getUserCardiacData = async (uid) => {
+module.exports.getUserCardiacData = async (uid, tid) => {
   try {
     let sql = `
-      select rmt_measure.id as MedidaId, amd_tipo_acto_medico.descricao as Acto_Medico, rmt_measure.instant as Instante, rmt_device_type.description as Dispositivo,
-      rmt_measure_type.description as Tipo_Medida, rmt_measure_type.unit as Unidades, rmt_measure.value as Valor
-      from rmt_measure
-      inner join amd_acto_medico
-      on rmt_measure.medical_act = amd_acto_medico.codigo
-      inner join amd_tipo_acto_medico
-      on amd_tipo_acto_medico.codigo = amd_acto_medico.tipo_acto_medico
-      inner join rmt_device_type_measure_type
-      on rmt_device_type_measure_type.id = rmt_measure.device_type_measure_type
-      inner join rmt_device_type
-      on rmt_device_type.id = rmt_device_type_measure_type.device_type
-      inner join rmt_measure_type
-      on rmt_measure_type.id = rmt_device_type_measure_type.measure_type
-      where amd_acto_medico.doente = $1 and rmt_measure_type.description = 'Distance' 
-      order by instante;
+    select rmt_measure.instant as Instante, rmt_measure.value as Valor
+    from rmt_measure
+    inner join amd_acto_medico
+    on rmt_measure.medical_act = amd_acto_medico.codigo
+    inner join amd_tipo_acto_medico
+    on amd_tipo_acto_medico.codigo = amd_acto_medico.tipo_acto_medico
+    inner join rmt_device_type_measure_type
+    on rmt_device_type_measure_type.id = rmt_measure.device_type_measure_type
+    inner join rmt_device_type
+    on rmt_device_type.id = rmt_device_type_measure_type.device_type
+    inner join rmt_measure_type
+    on rmt_measure_type.id = rmt_device_type_measure_type.measure_type
+    where amd_acto_medico.doente = $1 and rmt_measure_type.description = $2
+    order by instante;
     `
-    let result = await pool.query(sql, [uid]);
-    if (result.rows.length > 0) {
-      return { status: 200, result: result }
+    let type = ''
+    switch (parseInt(tid)) {
+      case 1:
+        type = 'Heart Rate'
+        break
+      
+      case 2:
+        type = 'Steps'
+        break
+      case 3:
+        type = 'Distance'
+        break
+      case 4:
+        type = 'Calories'
+        break
+
+      case 19:
+        type = 'Diastolic Blood Pressure'
+        break
+      case 20:
+        type = 'Systolic Blood Pressure'
+        break
+      
+      case 21:
+        type = 'Weight'
+        break
+      case 22:
+        type = 'Fat Free Mass'
+        break
+      case 23:
+        type = 'Fat Ratio'
+        break
+      case 24:
+        type = 'Fat Mass'
+        break
+
+      default:
+        break
+    }
+
+    if (type !== '') {
+      let result = await pool.query(sql, [uid, type]);
+      if (result.rows.length > 0) {
+        return { status: 200, result: result }
+      } else {
+        return { status: 404 }
+      }
     } else {
-      return { status: 404 }
+      return { status: 400 }
     }
   } catch (error) {
     return { status: 500, result: error };

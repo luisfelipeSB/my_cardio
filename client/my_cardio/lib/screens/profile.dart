@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -42,7 +44,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(usercode);
     final colorscheme = Theme.of(context).colorScheme;
     return Scaffold(
       key: scaffoldKey,
@@ -82,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
             // Got data
           } else if (snapshot.hasData) {
             UserProfileData? user = snapshot.data;
-            print(user!.toJson().toString());
+            log(user!.toJson().toString());
 
             page = Column(
               children: [
@@ -140,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ],
                                 curve: Curves.bounceInOut,
                                 onToggle: (index) {
-                                  print('theme toggled'); // TODO toggle theme
+                                  log('theme toggled'); // TODO toggle theme
                                 },
                               ),
 
