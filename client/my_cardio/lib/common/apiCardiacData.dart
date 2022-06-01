@@ -8,13 +8,11 @@ import 'constants.dart';
 
 class CardiacDataApiMethods {
   Future getData(String code, List<int> datatypes) async {
-    log(code);
-    log(datatypes.toString());
     if (code != 'initialize' && datatypes.isNotEmpty) {
       List<List<Measurement>> measurements = [];
       for (int i = 0; i < datatypes.length; i++) {
         int datatype = datatypes[i];
-        log('requesting $datatype');
+        log('requesting datatype $datatype');
         try {
           final response = await http.get(
               Uri.parse('$BASE_URI/api/users/$code/cardiacdata/$datatype'));

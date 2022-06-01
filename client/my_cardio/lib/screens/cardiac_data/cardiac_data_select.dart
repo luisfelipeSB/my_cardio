@@ -1,11 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_cardio/common/apiCardiacData.dart';
-import 'package:my_cardio/models/measurement.dart';
-
-import 'dart:developer';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../common/sharedPreferences.dart';
 import 'cardiac_data.dart';
 
 class CardiacDataSelectPage extends StatefulWidget {
@@ -17,6 +10,15 @@ class CardiacDataSelectPage extends StatefulWidget {
 
 class _CardiacDataSelectPageState extends State<CardiacDataSelectPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _openGraphPage(BuildContext context, List<int> datatypes) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CardiacDataPage(datatypes: datatypes),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,15 +80,7 @@ class _CardiacDataSelectPageState extends State<CardiacDataSelectPage> {
                     // Route
                     onTap: () async {
                       List<int> datatypes = [1];
-                      log(datatypes.toString());
-                      await MySharedPreferences.instance
-                          .setStringValue("datatypes", datatypes.toString());
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CardiacDataPage(),
-                        ),
-                      );
+                      _openGraphPage(context, datatypes);
                     },
                   ),
                 ),
@@ -105,17 +99,9 @@ class _CardiacDataSelectPageState extends State<CardiacDataSelectPage> {
                     ),
 
                     // Route
-                    onTap: () async {
+                    onTap: () {
                       List<int> datatypes = [2, 3, 4];
-                      log(datatypes.toString());
-                      await MySharedPreferences.instance
-                          .setStringValue("datatypes", datatypes.toString());
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CardiacDataPage(),
-                        ),
-                      );
+                      _openGraphPage(context, datatypes);
                     },
                   ),
                 ),
@@ -132,17 +118,9 @@ class _CardiacDataSelectPageState extends State<CardiacDataSelectPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    onTap: () async {
+                    onTap: () {
                       List<int> datatypes = [19, 20];
-                      log(datatypes.toString());
-                      await MySharedPreferences.instance
-                          .setStringValue("datatypes", datatypes.toString());
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CardiacDataPage(),
-                        ),
-                      );
+                      _openGraphPage(context, datatypes);
                     },
                   ),
                 ),
@@ -159,17 +137,9 @@ class _CardiacDataSelectPageState extends State<CardiacDataSelectPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    onTap: () async {
+                    onTap: () {
                       List<int> datatypes = [21, 22, 23, 24];
-                      log(datatypes.toString());
-                      await MySharedPreferences.instance
-                          .setStringValue("datatypes", datatypes.toString());
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CardiacDataPage(),
-                        ),
-                      );
+                      _openGraphPage(context, datatypes);
                     },
                   ),
                 ),
@@ -178,58 +148,6 @@ class _CardiacDataSelectPageState extends State<CardiacDataSelectPage> {
           ),
         ],
       ),
-
-      /*
-      FutureBuilder(
-        future: _myFuture,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          Widget page;
-
-          // Waiting to get data
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            page = Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(),
-                  Padding(
-                    padding: EdgeInsets.only(top: 16.0),
-                    child: Text('A buscar sua lista...'),
-                  ),
-                ],
-              ),
-            );
-
-            // Error
-          } else if (snapshot.hasError) {
-            page = const Center(
-              child: Text('Ocorreu um erro :('),
-            );
-
-            // Got data
-          } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-            List<Measurement>? history = snapshot.data;
-            page = Center(
-              child: Text(history.toString()),
-            );
-
-            // No data
-          } else {
-            page = Center(
-              child: Column(
-                children: const [
-                  Text('Lista vazia'),
-                  Text('Selecione (+) para adicionar um item'),
-                  Text('Mantenha um item pressionado para editá-lo'),
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-              ),
-            );
-          }
-          return page;
-        },
-      ),
-      */
     );
   }
 }

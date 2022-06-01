@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:my_cardio/common/apiCardiacData.dart';
+import 'package:my_cardio/common/constants.dart';
 import 'package:my_cardio/models/measurement.dart';
 import 'package:my_cardio/screens/cardiac_data/graph.dart';
 
 import 'dart:developer';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/sharedPreferences.dart';
 
 class CardiacDataPage extends StatefulWidget {
-  const CardiacDataPage({Key? key}) : super(key: key);
+  final List<int> datatypes;
+  const CardiacDataPage({Key? key, required this.datatypes}) : super(key: key);
 
   @override
   State<CardiacDataPage> createState() => _CardiacDataPageState();
@@ -21,7 +22,6 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
 
   late Future<List<List<Measurement>>> _myFuture;
   String usercode = 'initialize';
-  List<int> datatypes = [];
 
   @override
   void initState() {
@@ -29,18 +29,9 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
         .getStringValue("usercode")
         .then((value) => setState(() {
               usercode = value;
+              _myFuture = getData(usercode, widget.datatypes);
             }));
-    MySharedPreferences.instance
-        .getStringValue("datatypes")
-        .then((value) => setState(() {
-              value = value.substring(1, value.length - 1);
-              List<String> values = value.split(',');
-              for (final v in values) {
-                datatypes.add(int.parse(v));
-              }
-              _myFuture = getData(usercode, datatypes);
-            }));
-    _myFuture = getData(usercode, datatypes);
+    _myFuture = getData(usercode, widget.datatypes);
     super.initState();
   }
 
@@ -114,21 +105,40 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
             List<List<Measurement>>? measurements = snapshot.data;
 
             /*
+            log(widget.datatypes.toString());
             for (int i = 0; i < measurements!.length; i++) {
-              log('----- type ${datatypes[i]} -----');
-              for (int j = 0; j < measurements[i].length; j++) {
+              log('----- type ${widget.datatypes[i]} -----');
+              for (int j = 0; j < 10; j++) {
                 log(measurements[i][j].toJson().toString());
               }
             }
             */
-            page = Column(
-              children: [
-                // Graph
-                Graph(),
 
-                // Additional info
-                Text("More data for data types $datatypes"),
-              ],
+            page = ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: widget.datatypes.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: [
+                      Text(measure_types[widget.datatypes[index]]!),
+                      Graph(
+                          datatype: widget.datatypes[index],
+                          measurements: measurements![index]),
+                      /*
+                      Container(
+                        width: 300,
+                        height: 350,
+                        child: Graph(
+                            datatype: widget.datatypes[index],
+                            measurements: measurements![index]),
+                      ),
+                      */
+                    ],
+                  ),
+                );
+              },
             );
 
             // No data
