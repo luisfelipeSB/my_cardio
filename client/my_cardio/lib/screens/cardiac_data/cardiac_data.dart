@@ -126,15 +126,6 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
                       Graph(
                           datatype: widget.datatypes[index],
                           measurements: measurements![index]),
-                      /*
-                      Container(
-                        width: 300,
-                        height: 350,
-                        child: Graph(
-                            datatype: widget.datatypes[index],
-                            measurements: measurements![index]),
-                      ),
-                      */
                     ],
                   ),
                 );
