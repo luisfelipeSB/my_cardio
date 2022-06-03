@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_cardio/screens/cardiac_data/cardiac_data_select.dart';
 import 'package:my_cardio/screens/login.dart';
 import 'package:my_cardio/common/colorScheme.dart';
 
@@ -20,7 +19,6 @@ class _MyCardioAppState extends State<MyCardioApp> {
     return MaterialApp(
       title: 'MyCardio',
       theme: ThemeData(
-        brightness: Brightness.light,
         fontFamily: 'LexendDeca',
         colorScheme: lightColorScheme,
         backgroundColor: Colors.white,

@@ -6,7 +6,7 @@ import 'package:my_cardio/models/measurement.dart';
 import 'package:my_cardio/screens/activities/activities.dart';
 import 'package:my_cardio/screens/cardiac_data/cardiac_data_select.dart';
 import 'package:my_cardio/screens/risks.dart';
-import 'package:my_cardio/screens/profile.dart';
+import 'package:my_cardio/screens/profile/profile.dart';
 
 import '../common/sharedPreferences.dart';
 import '../models/checklistItem.dart';
@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   String usercode = '';
+  String username = '';
 
   @override
   void initState() {
@@ -33,6 +34,11 @@ class _HomePageState extends State<HomePage> {
         .getStringValue("usercode")
         .then((value) => setState(() {
               usercode = value;
+            }));
+    MySharedPreferences.instance
+        .getStringValue("username")
+        .then((value) => setState(() {
+              username = value;
             }));
     super.initState();
   }
@@ -139,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Text(
-                          '${usercode}',
+                          username,
                           style: const TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,

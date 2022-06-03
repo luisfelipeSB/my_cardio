@@ -15,6 +15,20 @@ router.get('/:id', async function (req, res, next) {
   res.status(result.status).send(result.result);
 });
 
+router.get('/:id/medrecord', async function (req, res, next) {
+  let id = req.params.id;
+  console.log("Sending user " + id + " medical record");
+  let result = await userModel.getMedicalRecord(id);
+  res.status(result.status).send(result.result);
+});
+
+router.get('/:id/stats', async function (req, res, next) {
+  let id = req.params.id;
+  console.log("Sending user " + id + " usage statistics summary");
+  let result = await userModel.getUserStatsSummary(id);
+  res.status(result.status).send(result.result);
+});
+
 /*----- CHECKLIST -----*/
 
 router.get('/:id/checklist/items', async function (req, res, next) {
@@ -25,15 +39,6 @@ router.get('/:id/checklist/items', async function (req, res, next) {
 });
 
 /*----- CARDIAC DATA -----*/
-
-/*
-router.get("/:id/cardiacdata", async (req, res) => {
-  const id = req.params.id;
-  const { status, result } = await userModel.getUserCardiacData(id);
-  console.log("Sending user " + id + " cardiac data");
-  res.status(status).send(result);
-});
-*/
 
 router.get("/:id/cardiacdata/:type", async (req, res) => {
   const id = req.params.id;

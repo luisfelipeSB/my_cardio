@@ -66,7 +66,7 @@ class _GraphState extends State<Graph> {
           ),
         ],
 
-        // Axes labels
+        // Axis labels
         titlesData: FlTitlesData(
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),

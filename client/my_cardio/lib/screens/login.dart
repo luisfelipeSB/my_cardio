@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:my_cardio/main.dart';
 import 'package:my_cardio/screens/home.dart';
-import 'package:my_cardio/screens/profile.dart';
+import 'package:my_cardio/screens/profile/profile.dart';
 
 import '../common/apiUser.dart';
 import '../common/sharedPreferences.dart';
@@ -99,6 +99,7 @@ class _LoginPageState extends State<LoginPage> {
 
                             var res = await userAPI.login(code, password);
 
+                            // Success
                             if (res.runtimeType == bool && res) {
                               await MySharedPreferences.instance
                                   .setStringValue("usercode", code);
@@ -109,11 +110,13 @@ class _LoginPageState extends State<LoginPage> {
                                   builder: (context) => const HomePage(),
                                 ),
                               );
+
+                              // Network or server error
                             } else if (res.runtimeType == ClientException) {
                               showDialog(
                                 context: context,
                                 builder: (_) => AlertDialog(
-                                  title: const Text('Erro de servidor'),
+                                  title: const Text('Erro de rede ou servidor'),
                                   actions: <Widget>[
                                     TextButton(
                                       child: const Text('OK'),
@@ -125,6 +128,8 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 barrierDismissible: true,
                               );
+
+                              // Authentication failure
                             } else {
                               showDialog(
                                 context: context,

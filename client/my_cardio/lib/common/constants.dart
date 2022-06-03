@@ -2,6 +2,8 @@
 
 const String BASE_URI = 'http://localhost:3000';
 
+const String DEFULT_NAME = 'Manoel da Silva'; // for demonstration only
+
 const measure_types = {
   1: 'Frequência Cardíaca (bpm)',
   2: 'Passos (#)',
