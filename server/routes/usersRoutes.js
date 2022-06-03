@@ -48,7 +48,7 @@ router.get("/:id/cardiacdata/:type", async (req, res) => {
   res.status(status).send(result);
 });
 
-router.get("/:id/cardiacdata/risks", async (req, res) => {
+router.get("/:id/risks", async (req, res) => {
   const id = req.params.id;
   const { status, result } = await userModel.getUserCardiacRisks(id);
 

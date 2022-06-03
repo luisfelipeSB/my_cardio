@@ -418,7 +418,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 leading: const Padding(
                   padding: EdgeInsets.all(3.0),
                   child: Icon(
-                    Icons.monitor_heart_outlined,
+                    Icons.insights,
                     size: 35,
                   ),
                 ),
@@ -466,11 +466,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 leading: Padding(
                   padding: EdgeInsets.all(3.0),
                   child: Icon(
-                    Icons.error_outline,
+                    Icons.emergency_outlined,
                     size: 35,
                   ),
                 ),
-                title: Text('Riscos detetatos'),
+                title: Text('Riscos detetados'),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -484,13 +484,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             const BorderRadius.all(Radius.circular(7)),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(7.0),
-                        child: Text('?????'),
-                      ),
+                          padding: const EdgeInsets.all(7.0),
+                          child: Text('${stats.totalMeasurementFlags}')),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
-                      child: Text('Última detecção: ?????'),
+                      child: Text(
+                          'Última medição: ${DateFormat.yMd().add_jm().format(stats.lastMeasurementFlag)}'),
                     ),
                   ],
                 ),
@@ -534,7 +534,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Text(
                           stats.activitiesCompleted > 0
                               ? 'Bom trabalho! Continue assim.'
-                              : 'Não se esqueça de dedicar tempo a si mesmx!',
+                              : 'Não se esqueça de dedicar tempo a si mesmo!',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),

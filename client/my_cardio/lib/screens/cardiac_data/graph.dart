@@ -23,7 +23,7 @@ class _GraphState extends State<Graph> {
       child: Container(
         decoration: BoxDecoration(
             color: const Color.fromARGB(255, 250, 250, 250),
-            border: Border.all(),
+            border: Border.all(color: Theme.of(context).colorScheme.outline),
             borderRadius: const BorderRadius.all(Radius.circular(15))),
         child: _scrollGraph(),
         margin: const EdgeInsets.all(3),

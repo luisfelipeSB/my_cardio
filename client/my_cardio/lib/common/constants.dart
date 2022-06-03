@@ -7,7 +7,7 @@ const String DEFULT_NAME = 'Manoel da Silva'; // for demonstration only
 const measure_types = {
   1: 'Frequência Cardíaca (bpm)',
   2: 'Passos (#)',
-  3: 'Distância (m)',
+  3: 'Distância',
   4: 'Calorias (kcal)',
   19: 'Tensão Arterial Diastólica (mmHg)',
   20: 'Tensão Arterial Sistólica (mmHg)',

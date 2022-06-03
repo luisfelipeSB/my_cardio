@@ -59,7 +59,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
             ),
           ),
           title: const Padding(
-              padding: EdgeInsets.only(top: 20), child: Text('Atividades')),
+              padding: EdgeInsets.only(top: 20), child: Text('Actividades')),
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),
@@ -159,7 +159,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                       title: Text(list[index].itemName),
                       subtitle: Text(list[index].itemTag),
                       secondary: const Icon(Icons.keyboard_arrow_left),
-                      tileColor: Theme.of(context).colorScheme.surfaceVariant,
+                      tileColor: Theme.of(context).colorScheme.onSecondary,
                       controlAffinity: ListTileControlAffinity.leading,
                       value: list[index].itemCheck,
                       onChanged: (val) async {
@@ -217,19 +217,19 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
       // Adding an item
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(
-            builder: (context) => CreateItem(),
-          ))
-              .then((value) {
-            setState(() {
-              _myFuture = getData(usercode);
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(
+              builder: (context) => CreateItem(),
+            ))
+                .then((value) {
+              setState(() {
+                _myFuture = getData(usercode);
+              });
             });
-          });
-        },
-        child: const Icon(Icons.add),
-      ),
+          },
+          child: const Icon(Icons.add),
+          backgroundColor: Theme.of(context).colorScheme.tertiary),
     );
   }
 }

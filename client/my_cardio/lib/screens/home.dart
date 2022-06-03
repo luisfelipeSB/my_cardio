@@ -62,6 +62,12 @@ class _HomePageState extends State<HomePage> {
                 bottomLeft: Radius.circular(40),
                 bottomRight: Radius.circular(40),
               ),
+              boxShadow: const [
+                BoxShadow(
+                  blurRadius: 10,
+                  color: Color.fromARGB(125, 126, 126, 126),
+                )
+              ],
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -91,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
-                              Icons.info_outline,
+                              Icons.medical_information_outlined,
                               size: 35,
                               color: colorscheme.inverseSurface,
                             ),
@@ -161,7 +167,7 @@ class _HomePageState extends State<HomePage> {
 
           // Panels
           Container(
-            margin: EdgeInsets.only(top: screenHeight * 0.01),
+            margin: EdgeInsets.only(top: screenHeight * 0.015),
             width: screenWidth * 0.85,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -273,7 +279,7 @@ class _HomePageState extends State<HomePage> {
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 15.0),
                                                 child: Icon(
-                                                  Icons.monitor_heart_outlined,
+                                                  Icons.emergency_outlined,
                                                   size: 40,
                                                   color: colorscheme.background,
                                                 ),

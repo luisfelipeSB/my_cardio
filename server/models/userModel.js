@@ -5,7 +5,7 @@ module.exports.login = async function (user) {
   try {
     let sql = "select * from dnt_doente where codigo = $1";
     let result = await pool.query(sql, [user.codigo]);
-    
+
     if (result.rows.length > 0 && result.rows[0].falecido == "N" && user.password == 123) //password simulada
       return { status: 200, result: result.rows[0] };
     else return { status: 401, result: { msg: "Incorrect credentials" } };
@@ -19,7 +19,7 @@ module.exports.getProfile = async function (id) {
   try {
     let sql = "select * from dnt_doente where codigo = $1";
     let result = await pool.query(sql, [id]);
-    
+
     if (result.rows.length > 0)
       return { status: 200, result: result.rows[0] };
     else return { status: 404, result: { msg: "User not found" } };
@@ -37,12 +37,12 @@ module.exports.getMedicalRecord = async function (id) {
     let weight = await this.getUserRecentCardiacData(id, 21);
     let height = await this.getUserRecentCardiacData(id, 29);
 
-    if (weight.hasOwnProperty('result')) 
+    if (weight.hasOwnProperty('result'))
       result.rows[0].peso = weight.result.valor
-    
-    if (height.hasOwnProperty('result')) 
+
+    if (height.hasOwnProperty('result'))
       result.rows[0].altura = height.result.valor
-    
+
 
     if (result.rows.length > 0)
       return { status: 200, result: result.rows[0] };
@@ -53,12 +53,16 @@ module.exports.getMedicalRecord = async function (id) {
   }
 }
 
+/*----- USER STATISTICS -----*/
+
 module.exports.getUserStatsSummary = async function (id) {
   try {
     let totalMeasurements = await this.getUserStatsTotalMeasurements(id)
     let lastMeasurement = await this.getUserStatsLastMeasurement(id)
     let remoteDevices = await this.getUserStatsRemoteDevices(id)
     let activitiesCompleted = await this.getUserStatsActivitiesCompleted(id)
+    let totalMeasurementFlags = await this.getUserStatsTotalMeasurementFlags(id)
+    let lastMeasurementFlag = await this.getUserStatsLastMeasurementFlag(id)
 
     /*
     console.log('----------- TM -----------')
@@ -73,7 +77,7 @@ module.exports.getUserStatsSummary = async function (id) {
 
     let result = {}
     let permitted = true
-    
+
     if (totalMeasurements.hasOwnProperty('result')) {
       result.totalMeasurements = totalMeasurements.result.count
     } else {
@@ -94,7 +98,17 @@ module.exports.getUserStatsSummary = async function (id) {
     } else {
       permitted = false
     }
-    
+    if (totalMeasurementFlags.hasOwnProperty('result')) {
+      result.totalMeasurementFlags = totalMeasurementFlags.result.count
+    } else {
+      permitted = false
+    }
+    if (lastMeasurementFlag.hasOwnProperty('result')) {
+      result.lastMeasurementFlag = lastMeasurementFlag.result.instant
+    } else {
+      permitted = false
+    }
+
     if (permitted)
       return { status: 200, result: result };
     else return { status: 404, result: { msg: "User not found" } };
@@ -122,7 +136,7 @@ module.exports.getUserStatsTotalMeasurements = async function (id) {
     where amd_acto_medico.doente = $1;
     `;
     let result = await pool.query(sql, [id]);
-    
+
     if (result.rows.length > 0)
       return { status: 200, result: result.rows[0] };
     else return { status: 404, result: { msg: "User not found" } };
@@ -151,7 +165,7 @@ module.exports.getUserStatsLastMeasurement = async function (id) {
     order by rmt_measure.instant desc limit 1;
     `;
     let result = await pool.query(sql, [id]);
-    
+
     if (result.rows.length > 0)
       return { status: 200, result: result.rows[0] };
     else return { status: 404, result: { msg: "User not found" } };
@@ -179,7 +193,7 @@ module.exports.getUserStatsRemoteDevices = async function (id) {
     where amd_acto_medico.doente = $1;
     `;
     let result = await pool.query(sql, [id]);
-    
+
     if (result.rows.length > 0)
       return { status: 200, result: result.rows };
     else return { status: 404, result: { msg: "User not found" } };
@@ -197,7 +211,68 @@ module.exports.getUserStatsActivitiesCompleted = async function (id) {
     where user_id_fk = $1;
     `;
     let result = await pool.query(sql, [id]);
-    
+
+    if (result.rows.length > 0)
+      return { status: 200, result: result.rows[0] };
+    else return { status: 404, result: { msg: "User not found" } };
+  } catch (err) {
+    console.log(err);
+    return { status: 500, result: err };
+  }
+}
+
+module.exports.getUserStatsTotalMeasurementFlags = async function (id) {
+  try {
+    let sql = `
+    select count(*)
+    from measure_flag
+    inner join rmt_measure 
+    on rmt_measure.id = measure_flag.rmt_measure_FK 
+    inner join amd_acto_medico 
+    on rmt_measure.medical_act = amd_acto_medico.codigo
+    inner join amd_tipo_acto_medico 
+    on amd_tipo_acto_medico.codigo = amd_acto_medico.tipo_acto_medico 
+    inner join rmt_device_type_measure_type 
+    on rmt_device_type_measure_type.id = rmt_measure.device_type_measure_type 
+    inner join rmt_device_type 
+    on rmt_device_type.id = rmt_device_type_measure_type.device_type 
+    inner join rmt_measure_type 
+    on rmt_measure_type.id = rmt_device_type_measure_type.measure_type 
+    where amd_acto_medico.doente = $1;
+    `;
+    let result = await pool.query(sql, [id]);
+
+    if (result.rows.length > 0)
+      return { status: 200, result: result.rows[0] };
+    else return { status: 404, result: { msg: "User not found" } };
+  } catch (err) {
+    console.log(err);
+    return { status: 500, result: err };
+  }
+}
+
+module.exports.getUserStatsLastMeasurementFlag = async function (id) {
+  try {
+    let sql = `
+    select rmt_measure.instant
+    from measure_flag
+    inner join rmt_measure 
+    on rmt_measure.id = measure_flag.rmt_measure_FK 
+    inner join amd_acto_medico 
+    on rmt_measure.medical_act = amd_acto_medico.codigo
+    inner join amd_tipo_acto_medico 
+    on amd_tipo_acto_medico.codigo = amd_acto_medico.tipo_acto_medico 
+    inner join rmt_device_type_measure_type 
+    on rmt_device_type_measure_type.id = rmt_measure.device_type_measure_type 
+    inner join rmt_device_type 
+    on rmt_device_type.id = rmt_device_type_measure_type.device_type 
+    inner join rmt_measure_type 
+    on rmt_measure_type.id = rmt_device_type_measure_type.measure_type 
+    where amd_acto_medico.doente = $1
+    order by instant desc limit 1;
+    `;
+    let result = await pool.query(sql, [id]);
+
     if (result.rows.length > 0)
       return { status: 200, result: result.rows[0] };
     else return { status: 404, result: { msg: "User not found" } };
@@ -232,7 +307,7 @@ module.exports.getUserCardiacData = async (uid, tid) => {
       case 1:
         type = 'Heart Rate'
         break
-      
+
       case 2:
         type = 'Steps'
         break
@@ -249,7 +324,7 @@ module.exports.getUserCardiacData = async (uid, tid) => {
       case 20:
         type = 'Systolic Blood Pressure'
         break
-      
+
       case 21:
         type = 'Weight'
         break
@@ -309,7 +384,7 @@ module.exports.getUserRecentCardiacData = async (uid, tid) => {
       case 1:
         type = 'Heart Rate'
         break
-      
+
       case 2:
         type = 'Steps'
         break
@@ -326,7 +401,7 @@ module.exports.getUserRecentCardiacData = async (uid, tid) => {
       case 20:
         type = 'Systolic Blood Pressure'
         break
-      
+
       case 21:
         type = 'Weight'
         break
@@ -365,8 +440,32 @@ module.exports.getUserRecentCardiacData = async (uid, tid) => {
 
 module.exports.getUserCardiacRisks = async (uid) => {
   try {
-    let result = `risks`
-    return { status: 200, result };
+    let sql = `
+    select rmt_measure.id, measure_flag_title, measure_flag_text, rmt_device_type.description as device, 
+    measure_type, instant, value
+    from measure_flag
+    inner join rmt_measure 
+    on rmt_measure.id = measure_flag.rmt_measure_FK 
+    inner join amd_acto_medico 
+    on rmt_measure.medical_act = amd_acto_medico.codigo
+    inner join amd_tipo_acto_medico 
+    on amd_tipo_acto_medico.codigo = amd_acto_medico.tipo_acto_medico 
+    inner join rmt_device_type_measure_type 
+    on rmt_device_type_measure_type.id = rmt_measure.device_type_measure_type 
+    inner join rmt_device_type 
+    on rmt_device_type.id = rmt_device_type_measure_type.device_type 
+    inner join rmt_measure_type 
+    on rmt_measure_type.id = rmt_device_type_measure_type.measure_type 
+    where amd_acto_medico.doente = $1
+    order by instant;
+    `
+
+    let result = await pool.query(sql, [uid]);
+    if (result.rows.length > 0) {
+      return { status: 200, result: result.rows }
+    } else {
+      return { status: 404 }
+    }
   } catch (error) {
     return { status: 500, result: error };
   }
@@ -376,7 +475,7 @@ module.exports.getUserCardiacRisks = async (uid) => {
 
 module.exports.getChecklistItems = async function (id) {
   try {
-    let sql = 
+    let sql =
       `select item_id, item_name, item_check, item_category
       from checklist
       where user_id_fk = $1
