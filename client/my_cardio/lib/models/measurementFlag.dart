@@ -1,7 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:developer';
-
 import 'package:my_cardio/common/constants.dart';
 
 class MeasurementFlag {

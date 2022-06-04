@@ -451,7 +451,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Text(
-                          'Última medição: ${DateFormat.yMd().add_jm().format(stats.lastMeasurement)}'),
+                          'Última medição: ${DateFormat('d/M/y').add_jm().format(stats.lastMeasurement)}'),
                     ),
                   ],
                 ),
@@ -490,7 +490,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Text(
-                          'Última medição: ${DateFormat.yMd().add_jm().format(stats.lastMeasurementFlag)}'),
+                          'Última medição: ${DateFormat('d/M/y').add_jm().format(stats.lastMeasurementFlag)}'),
                     ),
                   ],
                 ),

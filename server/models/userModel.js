@@ -53,6 +53,110 @@ module.exports.getMedicalRecord = async function (id) {
   }
 }
 
+/*----- USER NOTIFICATIONS -----*/
+
+module.exports.getUserNotifications = async function (id) {
+  try {
+    let measurementsPerDOY = await this.getMeasurementsPerDOY(id)
+    let risksPerDOY = await this.getRisksPerDOY(id)
+
+    let result = {}
+    let permitted = true
+
+    if (measurementsPerDOY.hasOwnProperty('result')) {
+      result.measurementsPerDOY = measurementsPerDOY.result.rows
+    } else {
+      permitted = false
+    }
+    if (risksPerDOY.hasOwnProperty('result')) {
+      result.risksPerDOY = risksPerDOY.result.rows
+    } else {
+      permitted = false
+    }
+
+    if (permitted) {
+      return { status: 200, result: result };
+    } else return { status: 404, result: { msg: "User not found" } };
+  } catch (err) {
+    console.log(err);
+    return { status: 500, result: err };
+  }
+}
+
+module.exports.getMeasurementsPerDOY = async (uid) => {
+  try {
+
+    // Getting from the past two years for demonstration purposes only
+
+    let sql = `
+    select date_part('doy', rmt_measure.instant) as day_of_year, count(rmt_measure.value) as count
+    from rmt_measure
+    inner join amd_acto_medico
+    on rmt_measure.medical_act = amd_acto_medico.codigo
+    inner join amd_tipo_acto_medico
+    on amd_tipo_acto_medico.codigo = amd_acto_medico.tipo_acto_medico
+    inner join rmt_device_type_measure_type
+    on rmt_device_type_measure_type.id = rmt_measure.device_type_measure_type
+    inner join rmt_device_type
+    on rmt_device_type.id = rmt_device_type_measure_type.device_type
+    inner join rmt_measure_type
+    on rmt_measure_type.id = rmt_device_type_measure_type.measure_type
+    where amd_acto_medico.doente = $1
+    and rmt_measure.instant + interval '2' year >= date_trunc('year', current_date) and
+        rmt_measure.instant + interval '2' year < current_date
+    group by day_of_year
+    order by day_of_year desc;
+    `
+
+    let result = await pool.query(sql, [uid]);
+    if (result.rows.length > 0) {
+      return { status: 200, result: result }
+    } else {
+      return { status: 404 }
+    }
+  } catch (error) {
+    return { status: 500, result: error };
+  }
+};
+
+module.exports.getRisksPerDOY = async (uid) => {
+  try {
+
+    // Getting from the past two years for demonstration purposes only
+
+    let sql = `
+    select date_part('doy', instant) as day_of_year, count(value) as count
+    from measure_flag
+    inner join rmt_measure 
+    on rmt_measure.id = measure_flag.rmt_measure_FK 
+    inner join amd_acto_medico 
+    on rmt_measure.medical_act = amd_acto_medico.codigo
+    inner join amd_tipo_acto_medico 
+    on amd_tipo_acto_medico.codigo = amd_acto_medico.tipo_acto_medico 
+    inner join rmt_device_type_measure_type 
+    on rmt_device_type_measure_type.id = rmt_measure.device_type_measure_type 
+    inner join rmt_device_type 
+    on rmt_device_type.id = rmt_device_type_measure_type.device_type 
+    inner join rmt_measure_type 
+    on rmt_measure_type.id = rmt_device_type_measure_type.measure_type 
+    where amd_acto_medico.doente = $1
+    and rmt_measure.instant + interval '2' year >= date_trunc('year', current_date) and
+        rmt_measure.instant + interval '2' year < current_date
+    group by day_of_year
+    order by day_of_year desc;
+    `
+
+    let result = await pool.query(sql, [uid]);
+    if (result.rows.length > 0) {
+      return { status: 200, result: result }
+    } else {
+      return { status: 404 }
+    }
+  } catch (error) {
+    return { status: 500, result: error };
+  }
+};
+
 /*----- USER STATISTICS -----*/
 
 module.exports.getUserStatsSummary = async function (id) {

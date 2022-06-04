@@ -5,6 +5,7 @@ import 'package:badges/src/badge.dart';
 import 'package:my_cardio/models/measurement.dart';
 import 'package:my_cardio/screens/activities/activities.dart';
 import 'package:my_cardio/screens/cardiac_data/cardiac_data_select.dart';
+import 'package:my_cardio/screens/notifications.dart';
 import 'package:my_cardio/screens/risks.dart';
 import 'package:my_cardio/screens/profile/profile.dart';
 
@@ -118,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ProfilePage(),
+                              builder: (context) => const NotificationsPage(),
                             ),
                           );
                         },

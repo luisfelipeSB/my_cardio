@@ -18,7 +18,7 @@ class UserProfileData {
     this.sexo,
     this.data_nascimento, [
 
-    // Optional default values (for demonstration only)
+    // DEMO ONLY (optional default values)
     this.nome = DEFULT_NAME,
     this.tipo_sanguineo = 'AB+',
     this.peso = 91.25,

@@ -29,6 +29,13 @@ router.get('/:id/stats', async function (req, res, next) {
   res.status(result.status).send(result.result);
 });
 
+router.get('/:id/notifications', async function (req, res, next) {
+  let id = req.params.id;
+  console.log("Sending user " + id + " notifications");
+  let result = await userModel.getUserNotifications(id);
+  res.status(result.status).send(result.result);
+});
+
 /*----- CHECKLIST -----*/
 
 router.get('/:id/checklist/items', async function (req, res, next) {

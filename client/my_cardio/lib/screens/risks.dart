@@ -126,7 +126,7 @@ class _RisksPageState extends State<RisksPage> {
                             ),
                           ),
                           title: Text(
-                              'Risco detetado em ${DateFormat.yMd().add_jm().format(risk.instant)}'),
+                              'Risco detetado em ${DateFormat('d/M/y').add_jm().format(risk.instant)}'),
                         ),
                       ),
 

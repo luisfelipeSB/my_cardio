@@ -181,7 +181,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                   onLongPress: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                      builder: (context) => UpdateItem(),
+                      builder: (context) => const UpdateItem(),
                       settings: RouteSettings(arguments: [
                         list[index].itemId.toString(),
                         list[index].itemName.toString(),
@@ -220,7 +220,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
           onPressed: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(
-              builder: (context) => CreateItem(),
+              builder: (context) => const CreateItem(),
             ))
                 .then((value) {
               setState(() {

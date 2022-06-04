@@ -62,7 +62,7 @@ class _GraphState extends State<Graph> {
           LineChartBarData(
             spots: spots,
             dotData: FlDotData(show: false),
-            color: Colors.blue,
+            color: Theme.of(context).colorScheme.tertiary,
           ),
         ],
 
@@ -83,7 +83,7 @@ class _GraphState extends State<Graph> {
                     child: SizedBox(
                       width: 50,
                       child: Text(
-                        DateFormat.yMd().add_jm().format(date),
+                        DateFormat('d/M/y').add_jm().format(date),
                         style: const TextStyle(fontSize: 10),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
