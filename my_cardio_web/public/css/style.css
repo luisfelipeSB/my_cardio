@@ -107,16 +107,19 @@ aside {
       list-style: none; }
     aside .side-inner .featured-users ul .person {
       margin-left: 40px;
-      margin-bottom: 15px; }
+      margin-bottom: 15px;
+      cursor: pointer; }
       aside .side-inner .featured-users ul .person .d-flex img {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 45px;
         flex: 0 0 45px;
         width: 45px;
-        border-radius: 50%; }
+        border-radius: 50%;
+        }
       aside .side-inner .featured-users ul .person .d-flex .user-name {
         color: #000;
-        font-size: 14px; }
+        font-size: 14px;
+        }
     aside .side-inner .nav-menu {
       margin-bottom: 50px; }
       aside .side-inner .nav-menu ul, aside .side-inner .nav-menu ul li {
@@ -261,23 +264,93 @@ aside {
 
 #container {
   position: relative;
-  top:8%;
+  top:7%;
   margin: auto;
-  width: 50%;
+  width: 95%;
+  height: 80%;
 }
 
-div.toggle.btn.btn-primary {
-  position:relative;
-  margin-left: 92.7%;
-  top:35px;
-}
 
-div.toggle.btn-light.off {
-  position:relative;
-  margin-left: 92.7%;
-  top:35px;
-}
-
-#toogleflag {
+/*RADIOBUTTONS*/
+.radiobuttons {
+  position: relative;
+  top:4%;
+  float: right;
+  margin-right: 45px;
+  max-width: 420px;
+  font-size: 10px;
+  position: relative;
   visibility: hidden;
 }
+
+ul.ks-cboxtags li{
+display: inline;
+}
+ul.ks-cboxtags li label{
+  display: inline-block;
+  background-color: #FFFFFF;
+  color: #023436;
+  border-radius: 100px;
+  margin: 5px 2px;
+}
+
+ul.ks-cboxtags li label {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+ul.ks-cboxtags li label::before {
+  display: inline-block;
+  font-family: Inter;
+  font-size: 10px;
+}
+
+ul.ks-cboxtags li input[type="checkbox"]:checked + label {
+  background-color: #023436;
+  color: #FFFFFF;
+}
+
+ul.ks-cboxtags li input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}
+
+ul.ks-cboxtags li input[type="radio"]:checked + label {
+  background-color: #023436;
+  color: #FFFFFF;
+}
+
+ul.ks-cboxtags li input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+
+
+/*wallpaper*/
+
+#wallpaper {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+	
+  /* Set up proportionate scaling */
+  width: 450px;
+  height: 500px;
+	
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  z-index: -1000;
+}
+
+@media screen and (max-width: 1024px) { /* Specific to this particular image */
+  #wallpaper {
+    left: 50%;
+    margin-left: -512px;   /* 50% */
+  }
+}
+
+
+

@@ -33,7 +33,7 @@
     <title>MyCardio</title>
   </head>
   <body>
-  
+    <img id ="wallpaper" src="images/wallpaper.png">
     
     <aside class="sidebar">
       <div class="toggle">
@@ -49,7 +49,7 @@
         
         <div class="nav-menu">
           <ul>
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="home.html">Home</a></li>
             <li><a href="index.html">Log out</a></li>
           </ul>
         </div>
@@ -64,16 +64,16 @@
 
     <main>
 
-       <!-- TOOGLE -->
+      <div id="radiobuttons" class="radiobuttons">
+        <ul class="ks-cboxtags">
+          <li><input type="radio" id="heartrate" name="radio"><label for="heartrate">Heart Rate</label></li>
+          <li><input type="radio" id="bloodpressure" name="radio"><label for="bloodpressure">Blood Pressure</label></li>
+          <li><input type="radio" id="weight" name="radio"><label for="weight">Weight</label></li>
+          <li><input type="radio" id="steps" name="radio"><label for="steps">Steps</label></li>
+        </ul>
+      </div>
 
-     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
-     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
-
-  <div id="toogleflag">
-  <input id="toogle" type="checkbox" data-toggle="toggle">
-  </div>
-
-  <div id="container" style="width:95%; height:600px;"></div>
+  <div id="container"></div>
 
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -104,9 +104,9 @@
     </div>
   </div>
 
+
+
     </main>
-    
-    
 
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
