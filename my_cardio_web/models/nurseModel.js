@@ -65,3 +65,27 @@ module.exports.insertFlag = async function(flag) {
         return { status:500, result: err};
     }
 }
+
+module.exports.editFlag = async function(data) {
+    try {
+        let sql ="update measure_flag "+
+        "set measure_flag_title = $1, measure_flag_text = $2 where measure_flag_id = $3";
+        let result = await pool.query(sql,[data.measure_flag_title,data.measure_flag_text,data.measure_flag_id]);
+        return { status:200, result:result.rows[0]};
+    } catch (err) {
+        console.log(err);
+        return { status:500, result: err};
+    }
+}
+
+module.exports.removeFlag = async function(id) {
+    try {
+        let sql ="delete from measure_flag "+
+        "where measure_flag_id = $1;";
+        let result = await pool.query(sql,[id]);
+        return { status:200, result:result.rows[0]};
+    } catch (err) {
+        console.log(err);
+        return { status:500, result: err};
+    }
+}

@@ -20,7 +20,6 @@
     <!-- Style -->
     <link rel="stylesheet" href="css/style.css">
 
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highcharts/5.0.6/css/highcharts.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/5.0.6/js/highstock.js"></script>
@@ -66,6 +65,10 @@
 
       <div id="radiobuttons" class="radiobuttons">
         <ul class="ks-cboxtags">
+          <li><input type="radio" id="visualize" name="radio2"><label id ="visualize" for="visualize">Visualize</label></li>
+          <li><input type="radio" id="insert" name="radio2"><label id ="insert" for="insert">Insert</label></li>
+          <li><input type="radio" id="edit" name="radio2"><label id ="edit" for="edit">Edit</label></li>
+          <p id="separator">&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp</p>
           <li><input type="radio" id="heartrate" name="radio"><label for="heartrate">Heart Rate</label></li>
           <li><input type="radio" id="bloodpressure" name="radio"><label for="bloodpressure">Blood Pressure</label></li>
           <li><input type="radio" id="weight" name="radio"><label for="weight">Weight</label></li>
@@ -75,7 +78,7 @@
 
   <div id="container"></div>
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -104,6 +107,35 @@
     </div>
   </div>
 
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit flag</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Title:</label>
+              <input type="text" class="form-control" id="editflagtitle">
+            </div>
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Text:</label>
+              <textarea class="form-control" id="editflagtext"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="removeflag" class="btn btn-danger mr-auto">Remove</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="editflag" class="btn btn-primary">Edit</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
     </main>

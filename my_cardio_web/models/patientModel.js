@@ -44,7 +44,7 @@ module.exports.getPatientMeasures = async function(id,type) {
 
 module.exports.getPatientMeasuresFlags = async function(id,type) {
     try {
-        let sql = "select rmt_measure.id, measure_flag_title, measure_flag_text, instant, value "+ 
+        let sql = "select rmt_measure.id, measure_flag_id, measure_flag_title, measure_flag_text, instant, value "+ 
         "from measure_flag "+
         "inner join rmt_measure "+
         "on rmt_measure.id = measure_flag.rmt_measure_FK "+

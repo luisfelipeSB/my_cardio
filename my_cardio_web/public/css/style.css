@@ -260,32 +260,49 @@ aside {
       color: #ccc; }
 
 
-/*HighChart*/
-
-#container {
-  position: relative;
-  top:7%;
-  margin: auto;
-  width: 95%;
-  height: 80%;
-}
-
-
 /*RADIOBUTTONS*/
 .radiobuttons {
   position: relative;
   top:4%;
   float: right;
   margin-right: 45px;
-  max-width: 420px;
+  max-width: 1000px;
   font-size: 10px;
   position: relative;
   visibility: hidden;
 }
 
+
+
+ul.ks-cboxtags li input#visualize[type="radio"]:checked + label#visualize {
+  background-color: #f3c76e;
+  color: #FFFFFF;
+}
+
+ul.ks-cboxtags li input#insert[type="radio"]:checked + label#insert {
+  background-color: #f3c76e;
+  color: #FFFFFF;
+}
+
+ul.ks-cboxtags li input#edit[type="radio"]:checked + label#edit {
+  background-color: #f3c76e;
+  color: #FFFFFF;
+}
+
 ul.ks-cboxtags li{
 display: inline;
 }
+
+#separator{
+  display: inline;
+  position:relative;
+  top:1.5px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 19px;
+  color:#023436;
+  font-weight: lighter;
+  }
+
 ul.ks-cboxtags li label{
   display: inline-block;
   background-color: #FFFFFF;
@@ -326,6 +343,7 @@ ul.ks-cboxtags li input[type="radio"] {
 }
 
 
+
 /*wallpaper*/
 
 #wallpaper {
@@ -351,6 +369,21 @@ ul.ks-cboxtags li input[type="radio"] {
     margin-left: -512px;   /* 50% */
   }
 }
+
+
+/*HighChart*/
+@import "https://code.highcharts.com/css/highcharts.css";
+
+#container {
+  position: relative;
+  top:7%;
+  margin: auto;
+  width: 95%;
+  height: 80%;
+}
+
+
+
 
 
 

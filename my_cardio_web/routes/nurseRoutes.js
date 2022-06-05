@@ -34,6 +34,19 @@ router.post('/addflag',async function(req, res, next) {
     res.status(result.status).send(result.result);
 });
 
+router.put('/editflag', async function(req, res, next) {
+    let id = req.params.id;
+    let data = req.body;
+    let result = await uModel.editFlag(data);
+    res.status(result.status).send(result.result);
+});
+
+router.delete('/removeflag/:id',async function(req, res, next) {
+    let id = req.params.id;
+    let result = await uModel.removeFlag(id);
+    res.status(result.status).send(result.result);
+});
+
  
 
 

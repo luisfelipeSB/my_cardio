@@ -6,7 +6,7 @@ var measure_type = "Heart Rate";
 var measure_type2;
 var measure_unit = "bpm";
 var measure_unit2;
-var nodata;
+var chartmode = "Visualize";
 
 window.onload = async function() {
     try {
@@ -41,6 +41,19 @@ window.onload = async function() {
 
         //DEFAULT RADIO BUTTON 
         document.getElementById("heartrate").checked = true;
+        document.getElementById("visualize").checked = true;
+
+        document.getElementById("visualize").onchange = function () {
+            chartmode = "Visualize";
+        };
+
+        document.getElementById("insert").onchange = function () {
+            chartmode = "Insert";
+        };
+
+        document.getElementById("edit").onchange = function () {
+            chartmode = "Edit";
+        };
 
         document.getElementById("heartrate").onchange = function () {
             measure_type = "Heart Rate";
@@ -83,6 +96,7 @@ async function getChartData(patientId) {
     let data = [];
     let measureid = [];
     let flags = [];
+    let flagid = [];
 
     if(chartexists) {
         chart.destroy();
@@ -106,11 +120,12 @@ async function getChartData(patientId) {
         measureid.push(measure.medidaid);
     }
     console.log(data);
-    }   
+    }
 
     if(isIterable(measuresflags)) {
     for (let measureflag of measuresflags) {
         flags.push({x: new Date(measureflag.instant), title: measureflag.measure_flag_title, text:measureflag.measure_flag_text});
+        flagid.push(measureflag.measure_flag_id);
     }
     console.log(flags);
     } 
@@ -119,6 +134,7 @@ async function getChartData(patientId) {
         let data2 = [];
         let measureid2 = [];
         let flags2 = [];
+        let flagid2 = [];
 
         let measures_second = await $.ajax({
             url: `/api/patients/${patientId}/measure/${measure_type2}`,
@@ -143,18 +159,20 @@ async function getChartData(patientId) {
         if(isIterable(measuresflags_second)) {
         for (let measureflag2 of measuresflags_second) {
             flags2.push({x: new Date(measureflag2.instant), title: measureflag2.measure_flag_title, text:measureflag2.measure_flag_text});
+            flagid2.push(measureflag2.measure_flag_id);
         }
         console.log(flags2);
         } 
 
-        drawMultipleChart(data,measureid,flags,data2,measureid2,flags2);
+        drawMultipleChart(data,measureid,flags,data2,measureid2,flags2,flagid,flagid2);
 
     } else {
-        drawChart(data,measureid,flags);
+        drawChart(data,measureid,flags,flagid);
     }
 }
 
-async function drawChart(data,measureid,flags) {
+async function drawChart(data,measureid,flags,flagid) {
+    if(data.length >= 1) {
     chart = Highcharts.stockChart('container', {
         rangeSelector: {
             selected: 1
@@ -162,13 +180,11 @@ async function drawChart(data,measureid,flags) {
         credits: {
             enabled: false
           },
-          
-          yAxis: {
+        yAxis: {
             title: {
                 text: measure_type +" ("+measure_unit+")"
             }
         },
-
         series: [{
             id: "first_series",
             turboThreshold: 0,
@@ -179,51 +195,15 @@ async function drawChart(data,measureid,flags) {
                 valueSuffix: measure_unit,
             },
             events: {
-
                 click: async function(event) {
                     let chartseries = this.chart.series[1];
-                    let measure_id;
-                    let time = new Date(event.point.x).getTime();
-                    let myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-
-                    for (let i = 0; i < data.length; i++) {
-                        if(time === data[i].x.getTime()) {
-                            measure_id = measureid[i];
-                            myModal.show();
-                        }
+                    if(chartmode == "Insert") {
+                        addFlag(event,chartseries,data,measureid,flags);
                     }
-
-                    document.getElementById("createflag").onclick = async function() {
-
-                        let title = document.getElementById("flagtitle").value;
-                        let text = document.getElementById("flagtext").value;
-
-                        let obj = {
-                            measure_id: measure_id,
-                            measure_title: title,
-                            measure_text: text
-                        }
-
-                        let newFlag = await $.ajax({
-                            url: '/api/nurses/addflag',
-                            method: 'post',
-                            data: JSON.stringify(obj),
-                            contentType: 'application/json',
-                            error: function() {
-                                alert(arguments[0].responseJSON.err); 
-                            },
-                            success: function(){  
-                                chartseries.addPoint({ 
-                                    title: title, 
-                                    x: event.point.x,
-                                    text: text
-                                });
-                                myModal.hide();
-                            }
-                        });
+                    if(chartmode == "Edit") {
+                        editFlag(event,flags,flagid);
                     }
                 }
-
             }
         },
             {
@@ -233,43 +213,41 @@ async function drawChart(data,measureid,flags) {
                 description: 'Flagged events.'
             },
             data: flags,
+            className: 'main-color',
             onSeries: 'first_series',
             shape: 'circlepin',
             width: 16
         }]
     });
-
     chartexists = true;
+    } else {
+        drawEmptyChart();
+    }
 }
 
-async function drawMultipleChart(data,measureid,flags,data2,measureid2,flags2) {
-
+async function drawMultipleChart(data,measureid,flags,data2,measureid2,flags2,flagid,flagid2) {
+    if(data.length >= 1 || data2.length >= 1) {
     chart = Highcharts.stockChart('container', {
         rangeSelector: {
             selected: 1
         },
         credits: {
             enabled: false
-          },
-          
-          yAxis: [{
+        },
+        yAxis: [{
             title: {
-              text: 'First yAxis'
+                text: measure_type +" ("+measure_unit+") "+"/ "+measure_type2 +" ("+measure_unit2+")"
             },
           },
         ],
-
         xAxis: {
             ordinal: false
-          },
-          
-
+        },
         plotOptions: {
             series: {
                 showInNavigator: true
             }
         },
-
         series: [{
             id: "first_series",
             turboThreshold: 0,
@@ -280,51 +258,15 @@ async function drawMultipleChart(data,measureid,flags,data2,measureid2,flags2) {
                 valueSuffix: measure_unit,
             },
             events: {
-
                 click: async function(event) {
                     let chartseries = this.chart.series[1];
-                    let measure_id;
-                    let time = new Date(event.point.x).getTime();
-                    let myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-
-                    for (let i = 0; i < data.length; i++) {
-                        if(time === data[i].x.getTime()) {
-                            measure_id = measureid[i];
-                            myModal.show();
-                        }
+                    if(chartmode == "Insert") {
+                        addFlag(event,data,measureid,flags);
                     }
-
-                    document.getElementById("createflag").onclick = async function() {
-
-                        let title = document.getElementById("flagtitle").value;
-                        let text = document.getElementById("flagtext").value;
-
-                        let obj = {
-                            measure_id: measure_id,
-                            measure_title: title,
-                            measure_text: text
-                        }
-
-                        let newFlag = await $.ajax({
-                            url: '/api/nurses/addflag',
-                            method: 'post',
-                            data: JSON.stringify(obj),
-                            contentType: 'application/json',
-                            error: function() {
-                                alert(arguments[0].responseJSON.err); 
-                            },
-                            success: function(){  
-                                chartseries.addPoint({ 
-                                    title: title, 
-                                    x: event.point.x,
-                                    text: text
-                                });
-                                myModal.hide();
-                            }
-                        });
+                    if(chartmode == "Edit") {
+                        editFlag(event,chartseries,flags,flagid);
                     }
                 }
-
             }
           },
           {
@@ -335,7 +277,7 @@ async function drawMultipleChart(data,measureid,flags,data2,measureid2,flags2) {
             },
             data: flags,
             onSeries: 'first_series',
-            shape: 'circlepin',
+            shape: 'squarepin',
             width: 16
         },
           {
@@ -348,51 +290,15 @@ async function drawMultipleChart(data,measureid,flags,data2,measureid2,flags2) {
                 valueSuffix: measure_unit2,
             },
             events: {
-
                 click: async function(event) {
                     let chartseries = this.chart.series[1];
-                    let measure_id;
-                    let time = new Date(event.point.x).getTime();
-                    let myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-
-                    for (let i = 0; i < data.length; i++) {
-                        if(time === data[i].x.getTime()) {
-                            measure_id = measureid2[i];
-                            myModal.show();
-                        }
+                    if(chartmode == "Insert") {
+                        addFlag(event,chartseries,data2,measureid2,flags2);
                     }
-
-                    document.getElementById("createflag").onclick = async function() {
-
-                        let title = document.getElementById("flagtitle").value;
-                        let text = document.getElementById("flagtext").value;
-
-                        let obj = {
-                            measure_id: measure_id,
-                            measure_title: title,
-                            measure_text: text
-                        }
-
-                        let newFlag = await $.ajax({
-                            url: '/api/nurses/addflag',
-                            method: 'post',
-                            data: JSON.stringify(obj),
-                            contentType: 'application/json',
-                            error: function() {
-                                alert(arguments[0].responseJSON.err); 
-                            },
-                            success: function(){  
-                                chartseries.addPoint({ 
-                                    title: title, 
-                                    x: event.point.x,
-                                    text: text
-                                });
-                                myModal.hide();
-                            }
-                        });
+                    if(chartmode == "Edit") {
+                        editFlag(event,flags2,flagid2);
                     }
                 }
-
             }
           },
           {
@@ -410,6 +316,10 @@ async function drawMultipleChart(data,measureid,flags,data2,measureid2,flags2) {
     });
 
     chartexists = true;
+
+} else {
+    drawEmptyChart();
+}
 }
 
 function isIterable(obj) {
@@ -420,3 +330,158 @@ function isIterable(obj) {
     return typeof obj[Symbol.iterator] === 'function';
 }
 
+async function addFlag(event,chartseries,data,measureid,flags) {
+
+    let measure_id;
+    let flag_exists = false;
+    let time = new Date(event.point.x).getTime();
+    let addModal = new bootstrap.Modal(document.getElementById('addModal'));
+    let xExtremes = chart.xAxis[0].getExtremes();
+    let yExtremes = chart.yAxis[0].getExtremes();
+    let delayInMilliseconds = 1000; //1 second
+
+    for(let j = 0; j < flags.length; j++) {
+        if(time === flags[j].x.getTime()) {
+            flag_exists = true;
+            break;
+        } else {
+            flag_exists = false;
+        }
+    }
+    
+    for (let i = 0; i < data.length; i++) {
+        if(time === data[i].x.getTime() && flag_exists == false) {
+            measure_id = measureid[i];
+            addModal.show();
+        }
+    }
+
+    document.getElementById("createflag").onclick = async function() {
+
+        let title = document.getElementById("flagtitle").value;
+        let text = document.getElementById("flagtext").value;
+
+        let obj = {
+            measure_id: measure_id,
+            measure_title: title,
+            measure_text: text
+        }
+
+        let newFlag = await $.ajax({
+            url: '/api/nurses/addflag',
+            method: 'post',
+            data: JSON.stringify(obj),
+            contentType: 'application/json',
+            error: function() {
+                alert(arguments[0].responseJSON.err); 
+            },
+            success: function(){  
+                chartseries.addPoint({ 
+                    title: title, 
+                    x: event.point.x,
+                    text: text
+                });
+                addModal.hide();
+                getChartData(patientId);
+                setTimeout(function() {
+                    chart.xAxis[0].setExtremes(xExtremes.userMin,xExtremes.userMax, true, true);
+                    chart.yAxis[0].setExtremes(yExtremes.min, yExtremes.max, true, true);
+                }, delayInMilliseconds);
+            }
+        });
+    }
+
+}
+
+async function drawEmptyChart() {
+    
+    chart = Highcharts.chart('container', {
+        title: {
+            text: '',
+        },
+        credits: {
+            enabled: false
+          },
+        series: []
+    
+    }, function(chart) { // on complete
+     
+        chart.renderer.text('No data available', 650, 330)
+            .css({
+                color: '#023436',
+                fontSize: '16px'
+            })
+            .add();
+        
+    });
+    chartexists = true;
+}
+
+async function editFlag(event,flags,flagid) {
+
+    let flag_id;
+    let flag_info;
+    let time = new Date(event.point.x).getTime();
+    let editModal = new bootstrap.Modal(document.getElementById('editModal'));
+    let xExtremes = chart.xAxis[0].getExtremes();
+    let yExtremes = chart.yAxis[0].getExtremes();
+    let delayInMilliseconds = 1000; //1 second
+
+    for (let i = 0; i < flags.length; i++) {
+        if(time === flags[i].x.getTime()) {
+            flag_id = flagid[i];
+            flag_info = flags[i];
+            editModal.show();
+        }
+    }
+
+    let title = document.getElementById("editflagtitle");
+    let text = document.getElementById("editflagtext");
+    title.value = flag_info.title;
+    text.value = flag_info.text;
+
+    document.getElementById("editflag").onclick = async function() {
+
+        let obj = {
+            measure_flag_title: title.value,
+            measure_flag_text: text.value,
+            measure_flag_id: flag_id
+        }
+        console.log(obj);
+        
+        let editFlag = await $.ajax({
+            url: `/api/nurses/editflag`,
+            method: 'put',
+            data: JSON.stringify(obj),
+            contentType: 'application/json',
+            error: function() {
+                alert(arguments[0].responseJSON.err); 
+            },
+            success: function(){  
+                editModal.hide();
+                getChartData(patientId);
+                setTimeout(function() {
+                    chart.xAxis[0].setExtremes(xExtremes.userMin,xExtremes.userMax, true, true);
+                    chart.yAxis[0].setExtremes(yExtremes.min, yExtremes.max, true, true);
+                }, delayInMilliseconds);
+            }
+        });
+    }
+
+    document.getElementById("removeflag").onclick = async function() {
+        
+        let removeFlag = await $.ajax({
+            url: `/api/nurses/removeflag/${flag_id}`,
+            method: 'delete',
+            contentType: 'application/json',
+            error: function() {
+                alert(arguments[0].responseJSON.err); 
+            },
+            success: function(){  
+                editModal.hide();
+                getChartData(patientId);
+            }
+        });
+    }
+
+}
