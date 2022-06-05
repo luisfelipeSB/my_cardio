@@ -261,10 +261,10 @@ async function drawMultipleChart(data,measureid,flags,data2,measureid2,flags2,fl
                 click: async function(event) {
                     let chartseries = this.chart.series[1];
                     if(chartmode == "Insert") {
-                        addFlag(event,data,measureid,flags);
+                        addFlag(event,chartseries,data,measureid,flags);
                     }
                     if(chartmode == "Edit") {
-                        editFlag(event,chartseries,flags,flagid);
+                        editFlag(event,flags,flagid);
                     }
                 }
             }
@@ -339,6 +339,9 @@ async function addFlag(event,chartseries,data,measureid,flags) {
     let xExtremes = chart.xAxis[0].getExtremes();
     let yExtremes = chart.yAxis[0].getExtremes();
     let delayInMilliseconds = 1000; //1 second
+
+    console.log(flags);
+    console.log(flags.length);
 
     for(let j = 0; j < flags.length; j++) {
         if(time === flags[j].x.getTime()) {
@@ -480,6 +483,10 @@ async function editFlag(event,flags,flagid) {
             success: function(){  
                 editModal.hide();
                 getChartData(patientId);
+                setTimeout(function() {
+                    chart.xAxis[0].setExtremes(xExtremes.userMin,xExtremes.userMax, true, true);
+                    chart.yAxis[0].setExtremes(yExtremes.min, yExtremes.max, true, true);
+                }, delayInMilliseconds);
             }
         });
     }
