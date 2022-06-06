@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:intl/intl.dart';
-import 'package:my_cardio/common/apiUser.dart';
-import 'package:my_cardio/common/sharedPreferences.dart';
-import 'package:my_cardio/models/userProfileData.dart';
-import 'package:my_cardio/models/userStatsSummary.dart';
+import 'dart:developer';
+
+import 'package:my_cardio/common/api/api_user.dart';
+import 'package:my_cardio/common/constants.dart';
+import 'package:my_cardio/common/shared_preferences.dart';
+import 'package:my_cardio/models/user_profile_data.dart';
+import 'package:my_cardio/models/user_stats_summary.dart';
 import 'package:my_cardio/screens/login.dart';
 import 'package:my_cardio/screens/profile/edit_profile.dart';
 
 import 'package:toggle_switch/toggle_switch.dart';
-
-import 'dart:developer';
+import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    MySharedPreferences.instance
+    SharedPreferencesMethods.instance
         .getStringValue("usercode")
         .then((value) => setState(() {
               usercode = value;
@@ -69,11 +70,27 @@ class _ProfilePageState extends State<ProfilePage> {
 
             // Error
           } else if (snapshot.hasError) {
+            log(snapshot.error.toString());
             page = Center(
               child: Column(
-                children: const [
-                  Text('Ocorreu um erro'),
-                  Text('Por favor tente novamente'),
+                children: [
+                  const Text('Ocorreu um erro'),
+                  const Text('Por favor tente novamente'),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Voltar',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
               ),
@@ -139,10 +156,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                   [colorscheme.primary],
                                 ],
                                 curve: Curves.bounceInOut,
+
+                                // TODO toggle theme
                                 onToggle: (mode) async {
                                   // 0 = light; 1 = dark
                                   log('theme toggled $mode');
-                                  await MySharedPreferences.instance
+                                  await SharedPreferencesMethods.instance
                                       .setStringValue("theme", mode.toString());
                                 },
                               ),
@@ -156,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: IconButton(
                                   icon: const Icon(Icons.login_rounded),
                                   onPressed: () {
-                                    MySharedPreferences.instance
+                                    SharedPreferencesMethods.instance
                                         .removeValue("usercode");
                                     Navigator.push(
                                       context,
@@ -174,11 +193,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
                         // Medical records title
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          margin: const EdgeInsets.only(top: 15, bottom: 10),
                           child: const Text(
                             'Ficha médica',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
 
@@ -200,7 +219,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text('Nome'),
-                                    Text(user.nome!)
+
+                                    // DEMO ONLY
+                                    Text(user.nome.isEmpty
+                                        ? DEFAULT_NAME
+                                        : user.nome)
                                   ],
                                 ),
                                 Divider(color: colorscheme.inverseSurface),
@@ -255,7 +278,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text('Tipo sanguíneo'),
-                                    Text(user.tipo_sanguineo!)
+
+                                    // DEMO ONLY
+                                    Text(user.tipo_sanguineo.isEmpty
+                                        ? DEFAULT_BLOODTYPE
+                                        : user.tipo_sanguineo),
                                   ],
                                 ),
                                 Divider(color: colorscheme.inverseSurface),
@@ -264,7 +291,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text('Altura'),
-                                    Text('${user.altura}')
+
+                                    // DEMO ONLY
+                                    Text((user.altura == 0
+                                            ? DEFAULT_HEIGHT
+                                            : user.altura)
+                                        .toString())
                                   ],
                                 ),
                                 Divider(color: colorscheme.inverseSurface),
@@ -273,7 +305,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text('Peso'),
-                                    Text('${user.peso}')
+
+                                    // DEMO ONLY
+                                    Text((user.peso == 0
+                                            ? DEFAULT_WEIGHT
+                                            : user.peso)
+                                        .toString())
                                   ],
                                 ),
                               ],
@@ -364,9 +401,24 @@ class _ProfilePageState extends State<ProfilePage> {
           } else {
             page = Center(
               child: Column(
-                children: const [
-                  Text('Ocorreu um erro'),
-                  Text('Por favor tente novamente'),
+                children: [
+                  const Text('Ocorreu um erro'),
+                  const Text('Por favor tente novamente'),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Voltar',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
               ),
@@ -439,7 +491,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: colorscheme.outline,
+                        color: colorscheme.onSecondary,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(7)),
                       ),
@@ -479,7 +531,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: colorscheme.outline,
+                        color: colorscheme.onPrimary,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(7)),
                       ),
@@ -490,7 +542,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Text(
-                          'Última medição: ${DateFormat('d/M/y').add_jm().format(stats.lastMeasurementFlag)}'),
+                          'Última detecção: ${DateFormat('d/M/y').add_jm().format(stats.lastMeasurementFlag)}'),
                     ),
                   ],
                 ),
@@ -518,7 +570,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: colorscheme.outline,
+                        color: colorscheme.onTertiary,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(7)),
                       ),

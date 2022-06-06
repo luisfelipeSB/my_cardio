@@ -2,7 +2,11 @@
 
 const String BASE_URI = 'http://localhost:3000';
 
-const String DEFULT_NAME = 'Manoel da Silva'; // DEMO ONLY
+// DEMO ONLY
+const String DEFAULT_NAME = 'Manoel da Silva';
+const String DEFAULT_BLOODTYPE = 'AB+';
+const double DEFAULT_WEIGHT = 91.25;
+const double DEFAULT_HEIGHT = 1.76;
 
 const measure_types = {
   1: 'Frequência Cardíaca (bpm)',

@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:http/http.dart' as http;
-import 'package:my_cardio/common/sharedPreferences.dart';
+import 'package:my_cardio/common/constants.dart';
 import 'package:my_cardio/models/notification.dart';
-import 'package:my_cardio/models/userProfileData.dart';
-import 'package:my_cardio/models/userStatsSummary.dart';
+import 'package:my_cardio/models/user_profile_data.dart';
+import 'package:my_cardio/models/user_stats_summary.dart';
 
-import 'constants.dart';
+import 'package:http/http.dart' as http;
 
 class UserApiMethods {
   Future login(codigo, password) async {
@@ -19,10 +18,6 @@ class UserApiMethods {
           body: jsonEncode({'codigo': codigo, 'password': password}));
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> res = jsonDecode(response.body);
-        final user = UserProfileData.fromJson(res);
-        await MySharedPreferences.instance.setStringValue(
-            "username", user.nome == null ? DEFULT_NAME : user.nome!);
         return true;
       } else {
         return false;
@@ -45,8 +40,8 @@ class UserApiMethods {
         } else {
           throw Exception('Failed to load items');
         }
-      } catch (e) {
-        return e.toString();
+      } catch (error) {
+        return error;
       }
     }
   }
@@ -96,7 +91,7 @@ class UserApiMethods {
             final dayOfYearDate = DateTime.fromMillisecondsSinceEpoch(
                 millisecondsSinceEpoch + millisDayOfYear);
 
-            // DEMO ONLY (to show date from 2020)
+            // DEMO ONLY (to show dates from 2020)
             final date = dayOfYearDate.subtract(const Duration(days: 732));
 
             measurementsPerDOY.add(Notificationo(
@@ -109,7 +104,7 @@ class UserApiMethods {
             final dayOfYearDate = DateTime.fromMillisecondsSinceEpoch(
                 millisecondsSinceEpoch + millisDayOfYear);
 
-            // DEMO ONLY (to show date from 2020)
+            // DEMO ONLY (to show dates from 2020)
             final date = dayOfYearDate.subtract(const Duration(days: 732));
 
             risksPerDOY.add(Notificationo(
@@ -121,6 +116,7 @@ class UserApiMethods {
           tmp.add(measurementsPerDOY);
           tmp.add(risksPerDOY);
           List<Notificationo> notifications = tmp.expand((i) => i).toList();
+          notifications.sort((a, b) => b.day.compareTo(a.day));
 
           return notifications;
         } else {

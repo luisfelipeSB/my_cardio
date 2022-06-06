@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:developer';
 
-import 'package:my_cardio/common/sharedPreferences.dart';
-import 'package:my_cardio/models/userProfileData.dart';
+import 'package:flutter/material.dart';
 
 import 'package:badges/badges.dart';
 
@@ -46,7 +44,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 badgeContent: const Icon(Icons.edit),
                 badgeColor: colorscheme.onPrimary,
                 position: BadgePosition.bottomEnd(),
-                child: Icon(
+
+                // TODO dynamic value
+                child: const Icon(
                   Icons.account_circle,
                   size: 130,
                 ),
@@ -63,8 +63,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
+
+                // TODO change profile icon
                 onPressed: () async {
-                  final String name = nameController.text;
+                  log('profile icon change');
                 },
                 child:
                     const Text('Salvar', style: TextStyle(color: Colors.white)),

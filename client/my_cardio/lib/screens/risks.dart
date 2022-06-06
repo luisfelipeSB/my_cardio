@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+
+import 'package:my_cardio/common/api/api_cardiac_data.dart';
+import 'package:my_cardio/common/shared_preferences.dart';
+import 'package:my_cardio/models/measurement_flag.dart';
+
 import 'package:intl/intl.dart';
-import 'package:my_cardio/common/sharedPreferences.dart';
-import 'package:my_cardio/models/measurementFlag.dart';
-
-import '../common/apiCardiacData.dart';
-
-import 'dart:developer';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RisksPage extends StatefulWidget {
   const RisksPage({Key? key}) : super(key: key);
@@ -24,7 +22,7 @@ class _RisksPageState extends State<RisksPage> {
 
   @override
   void initState() {
-    MySharedPreferences.instance
+    SharedPreferencesMethods.instance
         .getStringValue("usercode")
         .then((value) => setState(() {
               usercode = value;

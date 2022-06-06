@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_cardio/common/apiChecklist.dart';
 
-import 'dart:developer';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../common/sharedPreferences.dart';
+import 'package:my_cardio/common/api/api_checklist.dart';
+import 'package:my_cardio/common/shared_preferences.dart';
 
 class CreateItem extends StatefulWidget {
   const CreateItem({Key? key}) : super(key: key);
@@ -28,7 +25,7 @@ class _CreateItemState extends State<CreateItem> {
 
   @override
   Widget build(BuildContext context) {
-    MySharedPreferences.instance
+    SharedPreferencesMethods.instance
         .getStringValue("usercode")
         .then((value) => setState(() {
               usercode = value;

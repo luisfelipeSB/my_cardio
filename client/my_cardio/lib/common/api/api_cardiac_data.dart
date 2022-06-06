@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:http/http.dart' as http;
+import 'package:my_cardio/common/constants.dart';
 import 'package:my_cardio/models/measurement.dart';
-import 'package:my_cardio/models/measurementFlag.dart';
+import 'package:my_cardio/models/measurement_flag.dart';
 
-import 'constants.dart';
+import 'package:http/http.dart' as http;
 
 class CardiacDataApiMethods {
   Future getData(String code, List<int> datatypes) async {
@@ -23,8 +23,6 @@ class CardiacDataApiMethods {
             List<Measurement> data =
                 it.map((e) => Measurement.fromJson(e)).toList();
             measurements.add(data);
-          } else {
-            measurements.add(List<Measurement>.empty());
           }
         } catch (error) {
           log(error.toString());
@@ -33,7 +31,6 @@ class CardiacDataApiMethods {
       }
       return measurements;
     }
-    return List<List<Measurement>>.empty();
   }
 
   Future getRiskData(String code) async {

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:my_cardio/common/apiChecklist.dart';
+import 'package:my_cardio/common/api/api_checklist.dart';
+import 'package:my_cardio/common/shared_preferences.dart';
 import 'package:my_cardio/screens/activities/create_item.dart';
 import 'package:my_cardio/screens/activities/update_item.dart';
-import 'package:my_cardio/models/checklistItem.dart';
-
-import '../../common/sharedPreferences.dart';
+import 'package:my_cardio/models/checklist_item.dart';
 
 class ActivitiesPage extends StatefulWidget {
   const ActivitiesPage({Key? key}) : super(key: key);
@@ -24,7 +23,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
 
   @override
   void initState() {
-    MySharedPreferences.instance
+    SharedPreferencesMethods.instance
         .getStringValue("usercode")
         .then((value) => setState(() {
               usercode = value;
@@ -70,7 +69,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
         ),
       ),
 
-      // Activity list
+      // Body
       body: FutureBuilder(
         future: _myFuture,
         builder: (BuildContext context,
@@ -197,7 +196,6 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
                 );
               },
             );
-
             // No data
           } else {
             page = Center(

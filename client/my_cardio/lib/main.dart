@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'package:my_cardio/common/colorscheme.dart';
 import 'package:my_cardio/screens/login.dart';
-import 'package:my_cardio/common/colorScheme.dart';
 
 void main() {
   runApp(const MyCardioApp());
@@ -19,7 +20,7 @@ class _MyCardioAppState extends State<MyCardioApp> {
     return MaterialApp(
       title: 'MyCardio',
       theme: ThemeData(
-        fontFamily: 'LexendDeca',
+        fontFamily: 'OpenSans',
         colorScheme: lightColorScheme,
         backgroundColor: Colors.white,
       ),

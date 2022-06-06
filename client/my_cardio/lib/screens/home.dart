@@ -1,20 +1,15 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:badges/src/badge.dart';
-import 'package:my_cardio/models/measurement.dart';
+import 'package:my_cardio/common/constants.dart';
+
+import 'package:my_cardio/common/shared_preferences.dart';
 import 'package:my_cardio/screens/activities/activities.dart';
 import 'package:my_cardio/screens/cardiac_data/cardiac_data_select.dart';
 import 'package:my_cardio/screens/notifications.dart';
 import 'package:my_cardio/screens/risks.dart';
 import 'package:my_cardio/screens/profile/profile.dart';
 
-import '../common/sharedPreferences.dart';
-import '../models/checklistItem.dart';
-import '../models/userProfileData.dart';
-
-import 'dart:developer';
-import 'package:shared_preferences/shared_preferences.dart';
+// ignore: implementation_imports
+import 'package:badges/src/badge.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -27,19 +22,13 @@ class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   String usercode = '';
-  String username = '';
 
   @override
   void initState() {
-    MySharedPreferences.instance
+    SharedPreferencesMethods.instance
         .getStringValue("usercode")
         .then((value) => setState(() {
               usercode = value;
-            }));
-    MySharedPreferences.instance
-        .getStringValue("username")
-        .then((value) => setState(() {
-              username = value;
             }));
     super.initState();
   }
@@ -131,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Badge(
-                              badgeContent: Text('1'),
+                              badgeContent: const Text('0'), // TODO dynamic val
                               badgeColor: colorscheme.onPrimary,
                               child: Icon(
                                 Icons.notifications_outlined,
@@ -148,12 +137,14 @@ class _HomePageState extends State<HomePage> {
                   // Name
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+
+                    // DEMO ONLY
+                    children: const [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        padding: EdgeInsets.only(top: 20),
                         child: Text(
-                          username,
-                          style: const TextStyle(
+                          DEFAULT_NAME, // dynamic val
+                          style: TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                           ),
@@ -228,14 +219,14 @@ class _HomePageState extends State<HomePage> {
                                           Text(
                                             'Dados Cardíacos',
                                             style: TextStyle(
-                                                fontSize: 18,
+                                                fontSize: 20,
                                                 fontWeight: FontWeight.bold,
                                                 color: colorscheme.background),
                                           ),
                                           Text(
                                             'Acompanhe sua saúde',
                                             style: TextStyle(
-                                                fontSize: 16,
+                                                fontSize: 18,
                                                 color: colorscheme.background),
                                           ),
                                         ],
@@ -294,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                                                   Text(
                                                     'Riscos',
                                                     style: TextStyle(
-                                                      fontSize: 16,
+                                                      fontSize: 18,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: colorscheme
@@ -304,6 +295,7 @@ class _HomePageState extends State<HomePage> {
                                                   Text(
                                                     'Padrões detetados',
                                                     style: TextStyle(
+                                                        fontSize: 16,
                                                         color: colorscheme
                                                             .background),
                                                   ),
@@ -361,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                                                   Text(
                                                     'Checklist',
                                                     style: TextStyle(
-                                                      fontSize: 16,
+                                                      fontSize: 18,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: colorscheme
@@ -371,6 +363,7 @@ class _HomePageState extends State<HomePage> {
                                                   Text(
                                                     'Minhas atividades',
                                                     style: TextStyle(
+                                                        fontSize: 16,
                                                         color: colorscheme
                                                             .background),
                                                   ),

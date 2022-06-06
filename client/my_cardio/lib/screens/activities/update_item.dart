@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_cardio/common/apiChecklist.dart';
-
-import 'dart:developer';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_cardio/common/api/api_checklist.dart';
 
 class UpdateItem extends StatefulWidget {
   const UpdateItem({Key? key}) : super(key: key);
@@ -23,7 +20,6 @@ class _UpdateItemState extends State<UpdateItem> {
     if (args[1].isNotEmpty) {
       itemNameController.text = args[1];
     }
-    var colorscheme = Theme.of(context).colorScheme;
 
     selectedTag = args[2];
 
@@ -66,7 +62,6 @@ class _UpdateItemState extends State<UpdateItem> {
               padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(160, 55),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),

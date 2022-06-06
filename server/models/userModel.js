@@ -34,6 +34,11 @@ module.exports.getMedicalRecord = async function (id) {
     let sql = "select * from dnt_doente where codigo = $1";
     let result = await pool.query(sql, [id]);
 
+    result.rows[0].nome = null
+    result.rows[0].tipo_sanguineo = null
+    result.rows[0].peso = null
+    result.rows[0].altura = null
+
     let weight = await this.getUserRecentCardiacData(id, 21);
     let height = await this.getUserRecentCardiacData(id, 29);
 
@@ -42,7 +47,6 @@ module.exports.getMedicalRecord = async function (id) {
 
     if (height.hasOwnProperty('result'))
       result.rows[0].altura = height.result.valor
-
 
     if (result.rows.length > 0)
       return { status: 200, result: result.rows[0] };

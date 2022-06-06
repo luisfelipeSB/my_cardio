@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_cardio/common/apiCardiacData.dart';
-import 'package:my_cardio/common/constants.dart';
-import 'package:my_cardio/models/measurement.dart';
-import 'package:my_cardio/screens/cardiac_data/graph.dart';
-
 import 'dart:developer';
 
-import '../../common/sharedPreferences.dart';
+import 'package:my_cardio/common/api/api_cardiac_data.dart';
+import 'package:my_cardio/common/constants.dart';
+import 'package:my_cardio/common/shared_preferences.dart';
+import 'package:my_cardio/models/measurement.dart';
+import 'package:my_cardio/screens/cardiac_data/graph.dart';
 
 class CardiacDataPage extends StatefulWidget {
   final List<int> datatypes;
@@ -25,7 +24,7 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
 
   @override
   void initState() {
-    MySharedPreferences.instance
+    SharedPreferencesMethods.instance
         .getStringValue("usercode")
         .then((value) => setState(() {
               usercode = value;
@@ -40,8 +39,6 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorscheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
@@ -116,7 +113,7 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
 
             page = ListView.builder(
               padding: const EdgeInsets.all(8),
-              itemCount: widget.datatypes.length,
+              itemCount: measurements!.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(15.0),
@@ -125,7 +122,7 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
                       Text(measure_types[widget.datatypes[index]]!),
                       Graph(
                           datatype: widget.datatypes[index],
-                          measurements: measurements![index]),
+                          measurements: measurements[index]),
                     ],
                   ),
                 );

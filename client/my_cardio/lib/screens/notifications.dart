@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_cardio/common/apiCardiacData.dart';
-import 'package:my_cardio/common/apiChecklist.dart';
-import 'package:my_cardio/common/apiUser.dart';
-import 'package:my_cardio/common/sharedPreferences.dart';
+import 'package:my_cardio/common/api/api_checklist.dart';
+import 'package:my_cardio/common/api/api_user.dart';
+import 'package:my_cardio/common/shared_preferences.dart';
 import 'package:my_cardio/models/notification.dart';
-
-import 'dart:developer';
-
-import 'package:my_cardio/models/measurementFlag.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({Key? key}) : super(key: key);
@@ -27,7 +22,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   void initState() {
-    MySharedPreferences.instance
+    SharedPreferencesMethods.instance
         .getStringValue("usercode")
         .then((value) => setState(() {
               usercode = value;
@@ -114,14 +109,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   ? recent.add(n)
                   : older.add(n);
             }
-            older.sort((a, b) {
-              var adate = a.day; //before -> var adate = a.expiry;
-              var bdate = b.day; //before -> var bdate = b.expiry;
-              return adate.compareTo(
-                  bdate); //to get the order other way just switch `adate & bdate`
-            });
-            //recent.sort((a, b) => a.day.compareTo(b.day));
-            //older.sort((a, b) => a.day.compareTo(b.day));
 
             // Notifications list
             page = ListView(
@@ -189,7 +176,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                               ),
                               title: t
                                   ? const Text('Medições tomadas')
-                                  : const Text('Riscos detectados'),
+                                  : const Text('Riscos detetado'),
                               trailing: Text(DateFormat('d/M/y')
                                   .format(notif.day)
                                   .toString()),

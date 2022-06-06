@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:my_cardio/common/constants.dart';
+import 'package:my_cardio/models/checklist_item.dart';
+
 import 'package:http/http.dart' as http;
-import 'constants.dart';
-import '../models/checklistItem.dart';
 
 class ChecklistApiMethods {
   Future getData(usercode) async {

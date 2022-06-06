@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:my_cardio/main.dart';
+
+import 'package:my_cardio/common/api/api_user.dart';
+import 'package:my_cardio/common/shared_preferences.dart';
 import 'package:my_cardio/screens/home.dart';
-import 'package:my_cardio/screens/profile/profile.dart';
 
-import '../common/apiUser.dart';
-import '../common/sharedPreferences.dart';
-import '../models/userProfileData.dart';
-
-import 'dart:developer';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -101,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
 
                             // Success
                             if (res.runtimeType == bool && res) {
-                              await MySharedPreferences.instance
+                              await SharedPreferencesMethods.instance
                                   .setStringValue("usercode", code);
 
                               Navigator.push(

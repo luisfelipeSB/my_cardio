@@ -34,6 +34,9 @@ flutter:
     - assets/images/
   
   fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans-Regular.ttf
     - family: LexendDeca
       fonts:
         - asset: assets/fonts/LexendDeca-Regular.ttf

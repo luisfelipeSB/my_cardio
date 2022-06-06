@@ -1,14 +1,10 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/userProfileData.dart';
+class SharedPreferencesMethods {
+  SharedPreferencesMethods._privateConstructor();
 
-class MySharedPreferences {
-  MySharedPreferences._privateConstructor();
-
-  static final MySharedPreferences instance =
-      MySharedPreferences._privateConstructor();
+  static final SharedPreferencesMethods instance =
+      SharedPreferencesMethods._privateConstructor();
 
   setStringValue(String key, String value) async {
     SharedPreferences myPrefs = await SharedPreferences.getInstance();
