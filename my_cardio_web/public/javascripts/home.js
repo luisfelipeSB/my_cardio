@@ -7,6 +7,7 @@ var measure_type2;
 var measure_unit = "bpm";
 var measure_unit2;
 var chartmode = "Visualize";
+var device_type = "Steel HR";
 
 window.onload = async function() {
     try {
@@ -58,6 +59,7 @@ window.onload = async function() {
         document.getElementById("heartrate").onchange = function () {
             measure_type = "Heart Rate";
             measure_unit = "bpm";
+            device_type = "Steel HR";
             getChartData(patientId);
         };
         document.getElementById("bloodpressure").onchange = function () {
@@ -65,6 +67,7 @@ window.onload = async function() {
             measure_type2 = "Systolic Blood Pressure";
             measure_unit = "mmHg";
             measure_unit2 = "mmHg";
+            device_type = "BPM+";
             getChartData(patientId);
         };
         document.getElementById("weight").onchange = function () {
@@ -72,11 +75,13 @@ window.onload = async function() {
             measure_type2 = "Fat Ratio";
             measure_unit = "kg";
             measure_unit2 = "%";
+            device_type = "Body+";
             getChartData(patientId);
         };
         document.getElementById("steps").onchange = function () {
             measure_type = "Steps";
             measure_unit = "#";
+            device_type = "Steel HR";
             getChartData(patientId);
         };
 
@@ -88,7 +93,9 @@ window.onload = async function() {
 
 function patientSelected(codigo) {
     document.getElementById("radiobuttons").style.visibility ="visible";
+    document.getElementById("userchartinfo").style.visibility ="visible";
     patientId = codigo;
+    document.getElementById("chartinfousername").innerHTML = patientId;
     getChartData(patientId);
 }
 
@@ -101,7 +108,7 @@ async function getChartData(patientId) {
     if(chartexists) {
         chart.destroy();
     }
-
+    
     let measures = await $.ajax({
         url: `/api/patients/${patientId}/measure/${measure_type}`,
         method: "get",
@@ -169,6 +176,8 @@ async function getChartData(patientId) {
     } else {
         drawChart(data,measureid,flags,flagid);
     }
+    document.getElementById("chartinfodata").innerHTML = data.length;
+    document.getElementById("chartinfodevice").innerHTML = device_type;
 }
 
 async function drawChart(data,measureid,flags,flagid) {

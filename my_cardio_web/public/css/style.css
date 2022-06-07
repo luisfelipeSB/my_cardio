@@ -376,14 +376,54 @@ ul.ks-cboxtags li input[type="radio"] {
 
 #container {
   position: relative;
-  top:7%;
+  top:9%;
   margin: auto;
   width: 95%;
   height: 80%;
 }
 
+#userchartinfo {
+  position: relative;
+  top:11%;
+  display:inline;
+  margin-left:37px;
+  visibility: hidden;
+  width: auto;
+  background-color: white;
+  padding-bottom: 7px;
+  padding-top:5px;
+  padding-left: 10px;
+  border-radius: 5px 20px 10px 5px;
+}
 
+#chartinfoimg {
+  height: 26px;
+  width: 26px;
+}
 
+#chartinfousername {
+  font-size: 13px;
+  margin-right: 15px;
+}
 
+#chartinfocharticon {
+  height: 19px;
+  width: 19px;
+}
+
+#chartinfodata {
+  font-size: 13px;
+  margin-right: 15px;
+}
+
+#chartinfomedical {
+  height: 30px;
+  width: 30px;
+}
+
+#chartinfodevice {
+  font-size: 13px;
+  margin-right: 15px;
+}
 
 
