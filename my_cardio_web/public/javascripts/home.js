@@ -123,7 +123,7 @@ async function getChartData(patientId) {
 
     if(isIterable(measures)) {
     for (let measure of measures) {
-        data.push({x: new Date(measure.instante), y: Number(measure.valor)});
+        data.push({x: new Date(measure.instante).getTime(), y: Number(measure.valor)});
         measureid.push(measure.medidaid);
     }
     console.log(data);
@@ -131,7 +131,7 @@ async function getChartData(patientId) {
 
     if(isIterable(measuresflags)) {
     for (let measureflag of measuresflags) {
-        flags.push({x: new Date(measureflag.instant), title: measureflag.measure_flag_title, text:measureflag.measure_flag_text});
+        flags.push({x: new Date(measureflag.instant).getTime(), title: measureflag.measure_flag_title, text:measureflag.measure_flag_text});
         flagid.push(measureflag.measure_flag_id);
     }
     console.log(flags);
@@ -157,7 +157,7 @@ async function getChartData(patientId) {
 
         if(isIterable(measures_second)) {
         for (let measure2 of measures_second) {
-            data2.push({x: new Date(measure2.instante), y: Number(measure2.valor)});
+            data2.push({x: new Date(measure2.instante).getTime(), y: Number(measure2.valor)});
             measureid2.push(measure2.medidaid);
         }
         console.log(data2);
@@ -165,7 +165,7 @@ async function getChartData(patientId) {
     
         if(isIterable(measuresflags_second)) {
         for (let measureflag2 of measuresflags_second) {
-            flags2.push({x: new Date(measureflag2.instant), title: measureflag2.measure_flag_title, text:measureflag2.measure_flag_text});
+            flags2.push({x: new Date(measureflag2.instant).getTime(), title: measureflag2.measure_flag_title, text:measureflag2.measure_flag_text});
             flagid2.push(measureflag2.measure_flag_id);
         }
         console.log(flags2);
@@ -249,9 +249,6 @@ async function drawMultipleChart(data,measureid,flags,data2,measureid2,flags2,fl
             },
           },
         ],
-        xAxis: {
-            ordinal: false
-        },
         plotOptions: {
             series: {
                 showInNavigator: true
@@ -353,7 +350,7 @@ async function addFlag(event,chartseries,data,measureid,flags) {
     console.log(flags.length);
 
     for(let j = 0; j < flags.length; j++) {
-        if(time === flags[j].x.getTime()) {
+        if(time === flags[j].x) {
             flag_exists = true;
             break;
         } else {
@@ -362,7 +359,7 @@ async function addFlag(event,chartseries,data,measureid,flags) {
     }
     
     for (let i = 0; i < data.length; i++) {
-        if(time === data[i].x.getTime() && flag_exists == false) {
+        if(time === data[i].x && flag_exists == false) {
             measure_id = measureid[i];
             addModal.show();
         }
@@ -440,7 +437,7 @@ async function editFlag(event,flags,flagid) {
     let delayInMilliseconds = 1000; //1 second
 
     for (let i = 0; i < flags.length; i++) {
-        if(time === flags[i].x.getTime()) {
+        if(time === flags[i].x) {
             flag_id = flagid[i];
             flag_info = flags[i];
             editModal.show();
