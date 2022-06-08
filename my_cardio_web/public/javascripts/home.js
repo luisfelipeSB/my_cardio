@@ -365,15 +365,17 @@ async function addFlag(event,chartseries,data,measureid,flags) {
         }
     }
 
-    document.getElementById("createflag").onclick = async function() {
+    let title = document.getElementById("flagtitle");
+    let text = document.getElementById("flagtext");
+    title.value = "";
+    text.value = "";
 
-        let title = document.getElementById("flagtitle").value;
-        let text = document.getElementById("flagtext").value;
+    document.getElementById("createflag").onclick = async function() {
 
         let obj = {
             measure_id: measure_id,
-            measure_title: title,
-            measure_text: text
+            measure_title: title.value,
+            measure_text: text.value
         }
 
         let newFlag = await $.ajax({
