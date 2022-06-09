@@ -6,38 +6,29 @@ class UserProfileData {
   final DateTime data_nascimento;
   final String nome;
   final String tipo_sanguineo;
-  final double peso;
-  final double altura;
+  final String peso;
+  final String altura;
 
-  const UserProfileData._({
-    required this.codigo,
-    required this.sexo,
-    required this.data_nascimento,
-    required this.nome,
-    required this.tipo_sanguineo,
-    required this.peso,
-    required this.altura,
-  });
+  const UserProfileData._(
+    this.codigo,
+    this.sexo,
+    this.data_nascimento,
+    this.nome,
+    this.tipo_sanguineo,
+    this.peso,
+    this.altura,
+  );
 
   // Building user depending on what we get
   factory UserProfileData.fromJson(Map<String, dynamic> json) {
-    final co = json['codigo'];
-    final sx = json['sexo'];
-    final dt = DateTime.parse(json['data_nascimento'].toString());
-
-    final nm = json['nome'] ?? '';
-    final ts = json['tipo_sanguineo'] ?? '';
-    final ps = double.parse(json['peso'] ?? '0');
-    final al = double.parse(json['altura'] ?? '0');
-
     return UserProfileData._(
-      codigo: co,
-      sexo: sx,
-      data_nascimento: dt,
-      nome: nm,
-      tipo_sanguineo: ts,
-      peso: ps,
-      altura: al,
+      json['codigo'],
+      json['sexo'],
+      DateTime.parse(json['data_nascimento'].toString()),
+      json['nome'] ?? '',
+      json['tipo_sanguineo'] ?? '',
+      json['peso']?.substring(0, 7) ?? '',
+      json['altura']?.substring(0, 7) ?? '',
     );
   }
 

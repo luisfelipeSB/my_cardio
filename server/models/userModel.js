@@ -65,22 +65,19 @@ module.exports.getUserNotifications = async function (id) {
     let risksPerDOY = await this.getRisksPerDOY(id)
 
     let result = {}
-    let permitted = true
 
     if (measurementsPerDOY.hasOwnProperty('result')) {
       result.measurementsPerDOY = measurementsPerDOY.result.rows
     } else {
-      permitted = false
+      result.measurementsPerDOY = []
     }
     if (risksPerDOY.hasOwnProperty('result')) {
       result.risksPerDOY = risksPerDOY.result.rows
     } else {
-      permitted = false
+      result.risksPerDOY = []
     }
 
-    if (permitted) {
-      return { status: 200, result: result };
-    } else return { status: 404, result: { msg: "User not found" } };
+    return { status: 200, result: result };
   } catch (err) {
     console.log(err);
     return { status: 500, result: err };
@@ -90,6 +87,7 @@ module.exports.getUserNotifications = async function (id) {
 module.exports.getMeasurementsPerDOY = async (uid) => {
   try {
 
+    // DEMO ONLY
     // Getting from the past two years for demonstration purposes only
 
     let sql = `
@@ -126,6 +124,7 @@ module.exports.getMeasurementsPerDOY = async (uid) => {
 module.exports.getRisksPerDOY = async (uid) => {
   try {
 
+    // DEMO ONLY
     // Getting from the past two years for demonstration purposes only
 
     let sql = `
@@ -175,12 +174,6 @@ module.exports.getUserStatsSummary = async function (id) {
     /*
     console.log('----------- TM -----------')
     console.log(totalMeasurements)
-    console.log('----------- LM -----------')
-    console.log(lastMeasurement)
-    console.log('----------- RD -----------')
-    console.log(remoteDevices)
-    console.log('----------- AC -----------')
-    console.log(activitiesCompleted)
     */
 
     let result = {}
@@ -219,7 +212,7 @@ module.exports.getUserStatsSummary = async function (id) {
 
     if (permitted)
       return { status: 200, result: result };
-    else return { status: 404, result: { msg: "User not found" } };
+    else return { status: 404, result: { msg: "An error occurred while fetching user stats" } };
   } catch (err) {
     console.log(err);
     return { status: 500, result: err };
@@ -565,10 +558,10 @@ module.exports.getUserCardiacRisks = async (uid) => {
     inner join rmt_measure_type 
     on rmt_measure_type.id = rmt_device_type_measure_type.measure_type 
     where amd_acto_medico.doente = $1
-    order by instant;
+    order by instant desc;
     `
-
     let result = await pool.query(sql, [uid]);
+
     if (result.rows.length > 0) {
       return { status: 200, result: result.rows }
     } else {

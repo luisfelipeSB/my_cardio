@@ -39,7 +39,7 @@ class _GraphState extends State<Graph> {
       scrollDirection: Axis.horizontal,
       child: Container(
         padding: const EdgeInsets.only(bottom: 15),
-        width: MediaQuery.of(context).size.height * 2,
+        width: widget.measurements.length * 90,
         child: _graph(),
       ),
     );

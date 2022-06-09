@@ -45,10 +45,11 @@ class CardiacDataApiMethods {
               it.map((e) => MeasurementFlag.fromJson(e)).toList();
           return risks;
         } else {
-          throw Exception('Failed to load items');
+          return List<MeasurementFlag>.empty();
         }
-      } catch (e) {
-        return e.toString();
+      } catch (error) {
+        log(error.toString());
+        return error;
       }
     }
     return List<MeasurementFlag>.empty();

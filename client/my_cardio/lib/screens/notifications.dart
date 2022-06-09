@@ -118,7 +118,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Notifications from past week
                       const Padding(
                         padding: EdgeInsets.only(bottom: 10),
                         child: Text(
@@ -129,19 +128,53 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           ),
                         ),
                       ),
+
+                      // Notifications from past week
                       ListView.builder(
                         shrinkWrap: true,
                         itemCount: recent.length,
                         itemBuilder: (context, index) {
-                          return Container();
+                          final notif = notifications[index];
+                          bool type = (notif.type == 'measure' ? true : false);
+
+                          return Card(
+                            child: ListTile(
+                              leading: Container(
+                                decoration: BoxDecoration(
+                                  color: type
+                                      ? colorscheme.onSecondary
+                                      : colorscheme.onPrimary,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(7)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(7.0),
+                                  child: Text('${notif.count}'),
+                                ),
+                              ),
+                              title: type
+                                  ? const Text('Medições tomadas')
+                                  : const Text('Riscos detetados'),
+                              trailing: Text(DateFormat('d/M/y')
+                                  .format(notif.day)
+                                  .toString()),
+                            ),
+                            elevation: 5,
+                            color: type
+                                ? colorscheme.onSecondaryContainer
+                                : colorscheme.onPrimaryContainer,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          );
                         },
                       ),
+
                       Divider(
                         color: colorscheme.outline,
                         thickness: 2,
                       ),
 
-                      // Older notifications
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Text(
@@ -152,18 +185,20 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           ),
                         ),
                       ),
+
+                      // Older notifications
                       ListView.builder(
                         shrinkWrap: true,
                         itemCount: older.length,
                         itemBuilder: (context, index) {
                           final notif = notifications[index];
-                          bool t = (notif.type == 'measur' ? true : false);
-                          // Risk card
+                          bool type = (notif.type == 'measure' ? true : false);
+
                           return Card(
                             child: ListTile(
                               leading: Container(
                                 decoration: BoxDecoration(
-                                  color: t
+                                  color: type
                                       ? colorscheme.onSecondary
                                       : colorscheme.onPrimary,
                                   borderRadius: const BorderRadius.all(
@@ -171,18 +206,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(7.0),
-                                  child: Text('${notif.occurrences}'),
+                                  child: Text('${notif.count}'),
                                 ),
                               ),
-                              title: t
+                              title: type
                                   ? const Text('Medições tomadas')
-                                  : const Text('Riscos detetado'),
+                                  : const Text('Riscos detetados'),
                               trailing: Text(DateFormat('d/M/y')
                                   .format(notif.day)
                                   .toString()),
                             ),
                             elevation: 5,
-                            color: t
+                            color: type
                                 ? colorscheme.onSecondaryContainer
                                 : colorscheme.onPrimaryContainer,
                             shape: RoundedRectangleBorder(

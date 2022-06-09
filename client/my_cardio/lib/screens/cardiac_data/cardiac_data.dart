@@ -98,18 +98,8 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
             );
 
             // Got data
-          } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          } else if (snapshot.hasData && snapshot.data.isNotEmpty) {
             List<List<Measurement>>? measurements = snapshot.data;
-
-            /*
-            log(widget.datatypes.toString());
-            for (int i = 0; i < measurements!.length; i++) {
-              log('----- type ${widget.datatypes[i]} -----');
-              for (int j = 0; j < 10; j++) {
-                log(measurements[i][j].toJson().toString());
-              }
-            }
-            */
 
             page = ListView.builder(
               padding: const EdgeInsets.all(8),
@@ -131,13 +121,8 @@ class _CardiacDataPageState extends State<CardiacDataPage> {
 
             // No data
           } else {
-            page = Center(
-              child: Column(
-                children: const [
-                  Text('Sem dados cardíacos deste tipo'),
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-              ),
+            page = const Center(
+              child: Text('Sem dados cardíacos deste tipo.'),
             );
           }
           return page;

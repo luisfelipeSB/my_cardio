@@ -38,7 +38,7 @@ class UserApiMethods {
           final user = UserProfileData.fromJson(res);
           return user;
         } else {
-          throw Exception('Failed to load items');
+          throw Exception('Failed to load user data');
         }
       } catch (error) {
         return error;
@@ -59,8 +59,9 @@ class UserApiMethods {
         } else {
           throw Exception('Failed to load items');
         }
-      } catch (e) {
-        return e.toString();
+      } catch (error) {
+        log(error.toString());
+        return error;
       }
     }
   }
@@ -91,11 +92,11 @@ class UserApiMethods {
             final dayOfYearDate = DateTime.fromMillisecondsSinceEpoch(
                 millisecondsSinceEpoch + millisDayOfYear);
 
-            // DEMO ONLY (to show dates from 2020)
+            // DEMO ONLY (2 years to show dates from 2020)
             final date = dayOfYearDate.subtract(const Duration(days: 732));
 
             measurementsPerDOY.add(Notificationo(
-                type: 'measur', day: date, occurrences: int.parse(e['count'])));
+                type: 'measure', day: date, count: int.parse(e['count'])));
           }
           for (final e in it2) {
             final int millisDayOfYear = e['day_of_year'] * millisInADay;
@@ -104,11 +105,11 @@ class UserApiMethods {
             final dayOfYearDate = DateTime.fromMillisecondsSinceEpoch(
                 millisecondsSinceEpoch + millisDayOfYear);
 
-            // DEMO ONLY (to show dates from 2020)
+            // DEMO ONLY (2 years to show dates from 2020)
             final date = dayOfYearDate.subtract(const Duration(days: 732));
 
             risksPerDOY.add(Notificationo(
-                type: 'risk', day: date, occurrences: int.parse(e['count'])));
+                type: 'risk', day: date, count: int.parse(e['count'])));
           }
 
           // Combining notifications into a single list, sorted by item date

@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:my_cardio/common/api/api_cardiac_data.dart';
+import 'package:my_cardio/common/constants.dart';
 import 'package:my_cardio/common/shared_preferences.dart';
 import 'package:my_cardio/models/measurement_flag.dart';
 
@@ -95,7 +98,9 @@ class _RisksPageState extends State<RisksPage> {
             page = Container();
 
             // Got data
-          } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          } else if (snapshot.hasData &&
+              snapshot.data!.isNotEmpty &&
+              snapshot.data.runtimeType == List<MeasurementFlag>) {
             List<MeasurementFlag>? risks = snapshot.data;
 
             page = ListView.builder(
@@ -185,7 +190,9 @@ class _RisksPageState extends State<RisksPage> {
 
             // No data
           } else {
-            page = Container();
+            page = const Center(
+              child: Text('Nenhum risco detetado!'),
+            );
           }
           return page;
         },

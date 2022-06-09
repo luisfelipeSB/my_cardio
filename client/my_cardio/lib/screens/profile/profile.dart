@@ -97,7 +97,8 @@ class _ProfilePageState extends State<ProfilePage> {
             );
 
             // Got data
-          } else if (snapshot.hasData) {
+          } else if (snapshot.hasData &&
+              snapshot.data.runtimeType == UserProfileData) {
             UserProfileData? user = snapshot.data;
             log(user!.toJson().toString());
 
@@ -219,11 +220,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text('Nome'),
-
-                                    // DEMO ONLY
-                                    Text(user.nome.isEmpty
-                                        ? DEFAULT_NAME
-                                        : user.nome)
+                                    Text(user.nome)
                                   ],
                                 ),
                                 Divider(color: colorscheme.inverseSurface),
@@ -278,11 +275,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text('Tipo sanguíneo'),
-
-                                    // DEMO ONLY
-                                    Text(user.tipo_sanguineo.isEmpty
-                                        ? DEFAULT_BLOODTYPE
-                                        : user.tipo_sanguineo),
+                                    Text(user.tipo_sanguineo),
                                   ],
                                 ),
                                 Divider(color: colorscheme.inverseSurface),
@@ -291,12 +284,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text('Altura'),
-
-                                    // DEMO ONLY
-                                    Text((user.altura == 0
-                                            ? DEFAULT_HEIGHT
-                                            : user.altura)
-                                        .toString())
+                                    Text(user.altura)
                                   ],
                                 ),
                                 Divider(color: colorscheme.inverseSurface),
@@ -305,12 +293,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text('Peso'),
-
-                                    // DEMO ONLY
-                                    Text((user.peso == 0
-                                            ? DEFAULT_WEIGHT
-                                            : user.peso)
-                                        .toString())
+                                    Text(user.peso),
                                   ],
                                 ),
                               ],
@@ -385,7 +368,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           barrierDismissible: true,
                         );
                       } else {
-                        log('idk');
+                        log(res.runtimeType.toString());
                       }
                     },
                     child: Text(
@@ -497,13 +480,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(7.0),
-                        child: Text('${stats.totalMeasurements}'),
+                        child: Text(stats.totalMeasurements),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
-                      child: Text(
-                          'Última medição: ${DateFormat('d/M/y').add_jm().format(stats.lastMeasurement)}'),
+                      child: Text(stats.lastMeasurement.isNotEmpty
+                          ? DateFormat('d/M/y')
+                              .add_jm()
+                              .format(DateTime.parse(stats.lastMeasurement))
+                              .toString()
+                          : 'Nenhuma medição tomada.'),
                     ),
                   ],
                 ),
@@ -537,12 +524,16 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       child: Padding(
                           padding: const EdgeInsets.all(7.0),
-                          child: Text('${stats.totalMeasurementFlags}')),
+                          child: Text(stats.totalMeasurementFlags)),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
-                      child: Text(
-                          'Última detecção: ${DateFormat('d/M/y').add_jm().format(stats.lastMeasurementFlag)}'),
+                      child: Text(stats.lastMeasurementFlag.isNotEmpty
+                          ? DateFormat('d/M/y')
+                              .add_jm()
+                              .format(DateTime.parse(stats.lastMeasurementFlag))
+                              .toString()
+                          : 'Nenhum risco detetado!'),
                     ),
                   ],
                 ),
@@ -576,7 +567,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(7.0),
-                        child: Text('${stats.activitiesCompleted}'),
+                        child: Text(stats.activitiesCompleted),
                       ),
                     ),
                     Padding(
@@ -584,7 +575,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width * 0.6,
                         child: Text(
-                          stats.activitiesCompleted > 0
+                          int.parse(stats.activitiesCompleted) > 0
                               ? 'Bom trabalho! Continue assim.'
                               : 'Não se esqueça de dedicar tempo a si mesmo!',
                           maxLines: 2,

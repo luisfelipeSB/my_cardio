@@ -1,36 +1,43 @@
+// Properties are strings because they are only ever printed to screen;
+// properties are converted to their actual type before type-specific manipulation
+
 class UserStatsSummary {
-  final int? totalMeasurements;
-  final DateTime? lastMeasurement;
-  final List<String>? remoteDevices;
-  final int? activitiesCompleted;
-  final int? totalMeasurementFlags;
-  final DateTime? lastMeasurementFlag;
+  final String totalMeasurements;
+  final String lastMeasurement;
+  final List<String> remoteDevices;
+  final String activitiesCompleted;
+  final String totalMeasurementFlags;
+  final String lastMeasurementFlag;
 
   UserStatsSummary(
-      [this.totalMeasurements,
-      this.lastMeasurement,
-      this.remoteDevices,
-      this.activitiesCompleted,
-      this.totalMeasurementFlags,
-      this.lastMeasurementFlag]);
+    this.totalMeasurements,
+    this.lastMeasurement,
+    this.remoteDevices,
+    this.activitiesCompleted,
+    this.totalMeasurementFlags,
+    this.lastMeasurementFlag,
+  );
 
   factory UserStatsSummary.fromJson(Map<String, dynamic> json) {
-    int tm = int.parse(json['totalMeasurements']);
-    DateTime lm = DateTime.parse(json['lastMeasurement'].toString());
+    final a = json['totalMeasurements'] ?? '';
+    final b = json['lastMeasurement'] ?? '';
+
+    final c = json['activitiesCompleted'] ?? '';
+    final d = json['totalMeasurementFlags'] ?? '';
+    final e = json['lastMeasurementFlag'] ?? '';
+
     List<String> rd = [];
     for (final device in json['remoteDevices']) {
       rd.add(device['description']);
     }
-    int ac = int.parse(json['activitiesCompleted']);
-    int tmf = int.parse(json['totalMeasurementFlags']);
-    DateTime lmf = DateTime.parse(json['lastMeasurementFlag'].toString());
+
     return UserStatsSummary(
-      tm,
-      lm,
+      json['totalMeasurements'] ?? '0',
+      json['lastMeasurement'] ?? '',
       rd,
-      ac,
-      tmf,
-      lmf,
+      json['activitiesCompleted'] ?? '0',
+      json['totalMeasurementFlags'] ?? '0',
+      json['lastMeasurementFlag'] ?? '',
     );
   }
 }

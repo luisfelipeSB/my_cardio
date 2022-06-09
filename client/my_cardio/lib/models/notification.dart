@@ -1,8 +1,7 @@
 class Notificationo {
   final String type;
   final DateTime day;
-  final int occurrences;
+  final int count;
 
-  Notificationo(
-      {required this.type, required this.day, required this.occurrences});
+  Notificationo({required this.type, required this.day, required this.count});
 }
